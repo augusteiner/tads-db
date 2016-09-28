@@ -32,8 +32,9 @@ CREATE TABLE /*! IF NOT EXISTS */ cliente (
 
   id INT UNSIGNED NOT NULL /*! AUTO_INCREMENT */,
 
-  nome VARCHAR(100) NOT NULL,
   cpf VARCHAR(11) NOT NULL,
+
+  nome VARCHAR(100) NOT NULL,
 
   endereco VARCHAR(100) NOT NULL,
   cidade VARCHAR(50) NOT NULL,
@@ -77,8 +78,8 @@ CREATE TABLE /*! IF NOT EXISTS */ produto (
 
   descricao VARCHAR(100) NOT NULL,
 
-  qte INT UNSIGNED NOT NULL,
-  preco DECIMAL(14, 4) UNSIGNED NOT NULL,
+  qteEstoque INT UNSIGNED NOT NULL,
+  precoVenda DECIMAL(14, 4) UNSIGNED NOT NULL,
 
   CONSTRAINT pk_produto
     PRIMARY KEY (id)
@@ -149,8 +150,8 @@ CREATE TABLE /*! IF NOT EXISTS */ fornecedor_produto (
   fornecedorId INT UNSIGNED NOT NULL,
   produtoId INT UNSIGNED NOT NULL,
 
-  qte INT UNSIGNED NOT NULL,
-  preco DECIMAL(14, 4) UNSIGNED NOT NULL,
+  -- qte INT UNSIGNED NOT NULL,
+  precoCompra DECIMAL(14, 4) UNSIGNED NOT NULL,
 
   CONSTRAINT pk_fornecedor_produto
     PRIMARY KEY (id),
