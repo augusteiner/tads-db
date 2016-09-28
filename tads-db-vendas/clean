@@ -1,0 +1,1 @@
+rm -rfv {src,test}/*/{bin,obj,project.lock.json}

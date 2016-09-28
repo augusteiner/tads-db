@@ -1,0 +1,25 @@
+{
+
+  "version": "1.0.0-*",
+
+  "buildOptions": {
+    "debugType": "portable",
+    "emitEntryPoint": true
+  },
+
+  "dependencies": {
+    "MySql.Data": "7.0.5-*"
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.1",
+          "type": "platform"
+        }
+      }
+    }
+  }
+
+}
