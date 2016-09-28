@@ -4,6 +4,10 @@
  *
  */
 
+/*!40001 SET storage_engine = InnoDB */;
+/*!50503 SET default_storage_engine = InnoDB */;
+/*!40001 SET innodb_strict_mode = ON */;
+
 CREATE DATABASE /*! IF NOT EXISTS */ vendas_27_09_2016;
 
 USE vendas_27_09_2016;
@@ -24,7 +28,7 @@ CREATE TABLE /*! IF NOT EXISTS */ cliente (
     PRIMARY KEY (id)
 
 )
-/*! ENGINE=InnoDB */
+/*!50506 ROW_FORMAT=Compressed */
 ;
 
 CREATE TABLE /*! IF NOT EXISTS */ pedido (
@@ -48,7 +52,7 @@ CREATE TABLE /*! IF NOT EXISTS */ pedido (
     */
 
 )
-/*! ENGINE=InnoDB */
+/*!50506 ROW_FORMAT=Compressed */
 ;
 
 CREATE TABLE /*! IF NOT EXISTS */ produto (
@@ -64,7 +68,7 @@ CREATE TABLE /*! IF NOT EXISTS */ produto (
     PRIMARY KEY (id)
 
 )
-/*! ENGINE=InnoDB */
+/*!50506 ROW_FORMAT=Compressed */
 ;
 
 CREATE TABLE /*! IF NOT EXISTS */ pedido_item (
@@ -100,7 +104,7 @@ CREATE TABLE /*! IF NOT EXISTS */ pedido_item (
     */
 
 )
-/*! ENGINE=InnoDB */
+/*!50506 ROW_FORMAT=Compressed */
 ;
 
 CREATE TABLE /*! IF NOT EXISTS */ fornecedor (
@@ -119,7 +123,7 @@ CREATE TABLE /*! IF NOT EXISTS */ fornecedor (
     PRIMARY KEY (id)
 
 )
-/*! ENGINE=InnoDB */
+/*!50506 ROW_FORMAT=Compressed */
 ;
 
 CREATE TABLE /*! IF NOT EXISTS */ fornecedor_produto (
@@ -152,6 +156,6 @@ CREATE TABLE /*! IF NOT EXISTS */ fornecedor_produto (
     */
 
 )
-/*! ENGINE=InnoDB */
+/*!50506 ROW_FORMAT=Compressed */
 ;
 
