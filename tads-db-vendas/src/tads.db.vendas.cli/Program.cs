@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Data.Common;
 
 using MySql.Data.MySqlClient;
 
@@ -9,7 +10,7 @@ namespace tads.db.vendas.cli {
 
         public static void Main(string[] args) {
 
-            var connection = MySqlClientFactory.Instance.CreateConnection();
+            DbConnection connection = MySqlClientFactory.Instance.CreateConnection();
 
             connection.ConnectionString =
                 "Server=127.0.0.1;Port=4040;Database=vendas_27_09_2016;Uid=vendas;Pwd=;";
