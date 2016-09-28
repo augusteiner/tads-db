@@ -1,0 +1,20 @@
+{
+
+  "version": "1.0.0-*",
+
+  "buildOptions": {
+    "debugType": "portable",
+    "emitEntryPoint": false
+  },
+
+  "dependencies": {},
+
+  "frameworks": {
+    "netstandard1.0": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    }
+  }
+
+}
