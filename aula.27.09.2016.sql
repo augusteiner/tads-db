@@ -4,6 +4,11 @@
  *
  */
 
+/*!40001 SET sql_mode = 'TRADITIONAL' */;
+
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+
 /*!40001 SET storage_engine = InnoDB */;
 /*!50503 SET default_storage_engine = InnoDB */;
 /*!40001 SET innodb_strict_mode = ON */;
@@ -11,6 +16,17 @@
 CREATE DATABASE /*! IF NOT EXISTS */ vendas_27_09_2016;
 
 USE vendas_27_09_2016;
+
+/*!
+ALTER DATABASE
+
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_general_ci
+
+DEFAULT CHARACTER SET utf8mb4
+DEFAULT COLLATE utf8mb4_general_ci
+*/
+;
 
 CREATE TABLE /*! IF NOT EXISTS */ cliente (
 
