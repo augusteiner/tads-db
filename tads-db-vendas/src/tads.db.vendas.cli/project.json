@@ -8,6 +8,9 @@
   },
 
   "dependencies": {
+    "tads.db.vendas.common": "1.0.0-*",
+    "tads.db.vendas.model": "1.0.0-*",
+
     "MySql.Data": "7.0.5-*"
   },
 

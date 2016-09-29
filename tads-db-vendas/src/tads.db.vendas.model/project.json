@@ -7,7 +7,9 @@
     "emitEntryPoint": false
   },
 
-  "dependencies": {},
+  "dependencies": {
+    "tads.db.vendas.common": "1.0.0-*"
+  },
 
   "frameworks": {
     "netstandard1.0": {
