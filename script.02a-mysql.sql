@@ -16,8 +16,8 @@ DELIMITER //
 CREATE PROCEDURE P_GeraDadosFuncionario()
 BEGIN
 
-  ALTER TABLE Funcionario
-  NOCHECK CONSTRAINT CH_Func1
+  -- ALTER TABLE Funcionario
+  -- NOCHECK CONSTRAINT CH_Func1
 
   INSERT INTO Funcionario
   VALUES
@@ -46,8 +46,8 @@ BEGIN
 
     ;
 
-  ALTER TABLE Funcionario
-  CHECK CONSTRAINT CH_Func1
+  -- ALTER TABLE Funcionario
+  -- CHECK CONSTRAINT CH_Func1
 
 END//
 
@@ -55,14 +55,14 @@ END//
 /****************************************************************************/
 /****************************************************************************/
 
-CREATE PROCEDURE P_GeraDadosBonus
-  @Val_Bonus decimal(10,2)
+CREATE PROCEDURE P_GeraDadosBonus(
+  Val_Bonus decimal(10,2))
 BEGIN
 
-  ALTER TABLE Bonus
-  NOCHECK CONSTRAINT CH_Bonus1;
+  -- ALTER TABLE Bonus
+  -- NOCHECK CONSTRAINT CH_Bonus1;
 
-  DECLARE @Cod_Func int;
+  DECLARE Cod_Func int;
   DECLARE Cursor_Funcionario CURSOR FOR
     SELECT Cod_Func FROM Funcionario;
 
@@ -70,24 +70,24 @@ BEGIN
 
   FETCH NEXT
   FROM Cursor_Funcionario
-  INTO @Cod_Func;
+  INTO Cod_Func;
 
   WHILE @@Fetch_Status = 0
   BEGIN
 
    INSERT INTO Bonus(Cod_Func, Data_Bonus, Val_Bonus)
-   VALUES (@Cod_Func, getdate()-30, @Val_Bonus);
+   VALUES ( Cod_Func, getdate() - 30, Val_Bonus);
 
    FETCH NEXT
    FROM Cursor_Funcionario
-   INTO @Cod_Func;
+   INTO Cod_Func;
 
   END
 
   DEALLOCATE Cursor_Funcionario;
 
-  ALTER TABLE Bonus
-  NOCHECK CONSTRAINT CH_Bonus1;
+  -- ALTER TABLE Bonus
+  -- NOCHECK CONSTRAINT CH_Bonus1;
 
 END//
 
@@ -95,42 +95,42 @@ END//
 /****************************************************************************/
 
 CREATE PROCEDURE P_GeraDadosPontuacao(
-  @Val_Pontos decimal(10, 2),
-  @Cod_Func1 int,
-  @Cod_Func2 int)
+  Val_Pontos decimal(10, 2),
+  Cod_Func1 int,
+  Cod_Func2 int)
 BEGIN
 
-  ALTER TABLE Pontuacao
-  NOCHECK CONSTRAINT CH_Pto1;
+  -- ALTER TABLE Pontuacao
+  -- NOCHECK CONSTRAINT CH_Pto1;
 
-  DECLARE @Cod_Func int;
+  DECLARE Cod_Func int;
   DECLARE Cursor_Funcionario CURSOR FOR
     SELECT Cod_Func
     FROM Funcionario
-    WHERE Cod_Func BETWEEN @Cod_Func1 AND @Cod_Func2;
+    Cod_Func1 AND Cod_Func2;
 
   OPEN Cursor_Funcionario;
 
   FETCH NEXT
   FROM Cursor_Funcionario
-  INTO @Cod_Func;
+  INTO Cod_Func;
 
   WHILE (@@Fetch_Status = 0)
   BEGIN
 
     INSERT INTO Pontuacao (Cod_Func, Data_Pto, Pto_Func)
-    VALUES (@Cod_Func, getdate()-30, @Val_Pontos);
+    VALUES ( Cod_Func, getdate()-30, Val_Pontos);
 
     FETCH NEXT
     FROM Cursor_Funcionario
-    INTO @Cod_Func;
+    INTO Cod_Func;
 
   END;
 
   DEALLOCATE Cursor_Funcionario;
 
-  ALTER TABLE Pontuacao
-  NOCHECK CONSTRAINT CH_Pto1;
+  -- ALTER TABLE Pontuacao
+  -- NOCHECK CONSTRAINT CH_Pto1;
 
 END//
 
@@ -140,8 +140,8 @@ END//
 CREATE PROCEDURE P_GeraDadosHistorico()
 BEGIN
 
-  ALTER TABLE Historico
-  NOCHECK CONSTRAINT CH_Hist1;
+  -- ALTER TABLE Historico
+  -- NOCHECK CONSTRAINT CH_Hist1;
 
   INSERT INTO Historico
     SELECT Cod_Func, Getdate() - 30, Convert(Decimal(10,2), Sal_Func / 2), Sal_Func
@@ -155,67 +155,67 @@ END//
 /****************************************************************************/
 /****************************************************************************/
 
-CREATE PROCEDURE P_GeraDadosPedido
+CREATE PROCEDURE P_GeraDadosPedido()
 BEGIN
 
-  ALTER TABLE Pedido
-  NOCHECK CONSTRAINT CH_Pedido1, FK_Pedido1, FK_Pedido2;
+  -- ALTER TABLE Pedido
+  -- NOCHECK CONSTRAINT CH_Pedido1, FK_Pedido1, FK_Pedido2;
 
-  DECLARE @Cod_Func int;
-  DECLARE @Cod_Cli int;
-  DECLARE @Cod_Sta int;
-  DECLARE @Data Varchar(255);
-  DECLARE @DataPed smalldatetime;
-  DECLARE @Cod_CliLim int;
-  DECLARE @Cod_StaLim int;
-  DECLARE @Cod_FuncLim int;
+  DECLARE Cod_Func int;
+  DECLARE Cod_Cli int;
+  DECLARE Cod_Sta int;
+  DECLARE Data Varchar(255);
+  DECLARE DataPed smalldatetime;
+  DECLARE Cod_CliLim int;
+  DECLARE Cod_StaLim int;
+  DECLARE Cod_FuncLim int;
 
-  SELECT @Cod_FuncLim = Max(Cod_Func)
+  SELECT Cod_FuncLim = Max(Cod_Func)
   FROM Funcionario;
 
-  SELECT @Cod_CliLim = Max(Cod_Cli)
+  SELECT Cod_CliLim = Max(Cod_Cli)
   FROM Cliente;
 
-  SELECT @Cod_StaLim = Max(Cod_Sta)
+  SELECT Cod_StaLim = Max(Cod_Sta)
   FROM StatusPedido;
 
-  SET @Cod_Func = 1;
-  SET @Cod_Cli = 1;
-  SET @Cod_Sta = 1;
+  SET Cod_Func = 1;
+  SET Cod_Cli = 1;
+  SET Cod_Sta = 1;
 
-  WHILE @Cod_Func < @Cod_FuncLim
+  WHILE Cod_Func < Cod_FuncLim
   BEGIN
 
-    WHILE @Cod_Cli < @Cod_CliLim
+    WHILE Cod_Cli < Cod_CliLim
     BEGIN
 
-      WHILE @Cod_Sta <= @Cod_StaLim
+      WHILE Cod_Sta <= Cod_StaLim
       BEGIN
 
-        SET @Data = CONVERT(Char(02), MONTH(DATEADD(mm, @Cod_Sta * 2, Getdate())));
-        SET @Data = @Data + '/' + CONVERT(Char(02), DAY(GETDATE() - @Cod_Sta * 3));
-        SET @Data = @Data + '/' + CONVERT(Char(04), YEAR(DATEADD(YY, -1 * @Cod_Sta, GETDATE())));
-        SET @DataPed = Convert(smalldatetime, @Data);
+        SET Data = CONVERT(Char(02), MONTH(DATEADD(mm, Cod_Sta * 2, Getdate())));
+        SET Data = Data + '/' + CONVERT(Char(02), DAY(GETDATE() - Cod_Sta * 3));
+        SET Data = Data + '/' + CONVERT(Char(04), YEAR(DATEADD(YY, -1 * Cod_Sta, GETDATE())));
+        SET DataPed = Convert(smalldatetime, Data);
 
         INSERT INTO Pedido
-        VALUES (@Cod_Cli, @Cod_Func, @Cod_Sta, @Data, 100 * @Cod_Cli);
+        VALUES ( Cod_Cli, Cod_Func, Cod_Sta, Data, 100 * Cod_Cli);
 
-        SET @Cod_Sta = @Cod_Sta + 1;
+        SET Cod_Sta = Cod_Sta + 1;
 
       END
 
-      SET @Cod_Cli = @Cod_Cli + 1;
-      SET @Cod_Sta = 1;
+      SET Cod_Cli = Cod_Cli + 1;
+      SET Cod_Sta = 1;
 
     END
 
-    SET @Cod_Func = @Cod_Func + 1;
-    SET @Cod_Cli = 1;
+    SET Cod_Func = Cod_Func + 1;
+    SET Cod_Cli = 1;
 
   END
 
-  ALTER TABLE Pedido
-  NOCHECK CONSTRAINT CH_Pedido1, FK_Pedido1, FK_Pedido2;
+  -- ALTER TABLE Pedido
+  -- NOCHECK CONSTRAINT CH_Pedido1, FK_Pedido1, FK_Pedido2;
 
 END//
 
@@ -223,15 +223,15 @@ END//
 /****************************************************************************/
 
 CREATE PROCEDURE P_Parcelas (
-  @Val_Lim1 decimal(10,2),
-  @Val_Lim2 decimal(10,2),
-  @NumPar int)
+  Val_Lim1 decimal(10,2),
+  Val_Lim2 decimal(10,2),
+  NumPar int)
 BEGIN
 
-  ALTER TABLE PARCELA
-  NOCHECK CONSTRAINT CH_Parcela1;
+  -- ALTER TABLE PARCELA
+  -- NOCHECK CONSTRAINT CH_Parcela1;
 
-  DECLARE @Tabela TABLE (
+  DECLARE Tabela TABLE (
     Linha int identity,
     Num_Par smallint,
     Num_Ped int,
@@ -241,47 +241,47 @@ BEGIN
     Data_Pgto smalldatetime,
     Val_Pgto decimal(10,2));
 
-  DECLARE @Cont int;
-  DECLARE @TotLim int;
-  DECLARE @Cont2 int;
+  DECLARE Cont int;
+  DECLARE TotLim int;
+  DECLARE Cont2 int;
 
-  SET @Cont = 1;
-  SET @Cont2 = 1;
+  SET Cont = 1;
+  SET Cont2 = 1;
 
-  INSERT INTO @Tabela
+  INSERT INTO Tabela
     SELECT null, Num_Ped, Data_Ped, Val_Ped, Convert(Decimal(10,2), Val_Ped / 3), null, null
     FROM PEDIDO
-    WHERE Val_Ped between @Val_Lim1 AND @Val_Lim2;
+    WHERE Val_Ped between Val_Lim1 AND Val_Lim2;
 
-  SELECT @TotLim = Count(*)
-  from @Tabela;
+  SELECT TotLim = Count(*)
+  from Tabela;
 
-  WHILE @Cont <= @TotLim
+  WHILE Cont <= TotLim
   BEGIN
 
-    WHILE @Cont2 <= @NumPar
+    WHILE Cont2 <= NumPar
     BEGIN
 
-      UPDATE @Tabela
-      SET Num_Par = @Cont2,
-        Data_Venc = Data_Venc + @Cont2,
+      UPDATE Tabela
+      SET Num_Par = Cont2,
+        Data_Venc = Data_Venc + Cont2,
         Val_Pgto = Val_Par,
         Data_Pgto = Data_Venc
-      WHERE Linha = @Cont;
+      WHERE Linha = Cont;
 
-      SET @Cont2 = @Cont2 + 1;
-      SET @Cont = @Cont + 1;
+      SET Cont2 = Cont2 + 1;
+      SET Cont = Cont + 1;
 
     END
 
-    SET @Cont2 = 1;
+    SET Cont2 = 1;
 
   END
 
   INSERT INTO Parcela
     SELECT Num_Par, Num_Ped,
     Data_Venc,Val_Par,Data_Pgto
-    FROM @Tabela;
+    FROM Tabela;
 
   ALTER TABLE PARCELA
   CHECK CONSTRAINT CH_Parcela1;
@@ -292,16 +292,16 @@ END//
 /****************************************************************************/
 
 CREATE PROCEDURE P_GeraDadosItens (
-  @Cod1 int,
-  @Cod2 int,
-  @Qtd int)
+  Cod1 int,
+  Cod2 int,
+  Qtd int)
 BEGIN
 
   INSERT INTO Itens
-    SELECT Pedido.Num_Ped, Produto.Cod_Prod, @Qtd, Produto.Val_UnitProd
+    SELECT Pedido.Num_Ped, Produto.Cod_Prod, Qtd, Produto.Val_UnitProd
     FROM Pedido
     CROSS JOIN Produto
-    WHERE Pedido.Num_Ped BETWEEN @Cod1 AND @Cod2;
+    WHERE Pedido.Num_Ped BETWEEN Cod1 AND Cod2;
 
 END//
 
@@ -310,12 +310,14 @@ END//
 /* criadas anteriormente neste script                                       */
 /****************************************************************************/
 
+
 INSERT INTO TipoEnd VALUES ('Entrega');
 INSERT INTO TipoEnd VALUES ('Faturamento');
 INSERT INTO TipoEnd VALUES ('Correspondência');
 INSERT INTO TipoEnd VALUES ('Cobrança');
 INSERT INTO TipoEnd VALUES ('Residential');
 INSERT INTO TipoEnd VALUES ('Comercial');
+
 
 INSERT INTO Estado VALUES ('AC','Acre');
 INSERT INTO Estado VALUES ('AL','Alagoas');
@@ -360,6 +362,7 @@ INSERT INTO TipoCli VALUES ('Prata');
 INSERT INTO TipoCli VALUES ('Bronze');
 INSERT INTO TipoCli VALUES ('Cobre');
 INSERT INTO TipoCli VALUES ('Zinco');
+
 
 INSERT INTO Cliente VALUES (1,'João Carlos','01/01/1999',10000,'M');
 INSERT INTO Cliente VALUES (1,'Daniel Souza','02/02/1999',10000,'M');
@@ -550,6 +553,7 @@ INSERT INTO Credito VALUES (59,1000.00,Getdate()-1);
 INSERT INTO Credito VALUES (60,1000.00,Getdate()-2);
 INSERT INTO Credito VALUES (61,1000.00,Getdate()-3);
 
+
 INSERT INTO Fone VALUES (1,'434-2356','011');
 INSERT INTO Fone VALUES (1,'256-4578','011');
 INSERT INTO Fone VALUES (1,'256-5623','011');
@@ -629,6 +633,7 @@ INSERT INTO Fone VALUES (58,'444-1919','011');
 INSERT INTO Fone VALUES (59,'222-2020','011');
 INSERT INTO Fone VALUES (62,'333-2121','011');
 
+
 INSERT INTO Email VALUES (1,'Joaobrasao@Hotmail.com');
 INSERT INTO Email VALUES (1,'Joaobrasao@bbb.com.br');
 INSERT INTO Email VALUES (1,'Joaobrasao@xxx.com.br');
@@ -660,10 +665,12 @@ INSERT INTO Email VALUES (55,'GeraldoSenedeze@uol.com.br');
 INSERT INTO Email VALUES (61,'AngelinoSaullo@uol.com.br');
 INSERT INTO Email VALUES (62,'AldoSavazzoni@uol.com.br');
 
+
 INSERT INTO StatusPedido VALUES ('Aberto');
 INSERT INTO StatusPedido VALUES ('Pendente');
 INSERT INTO StatusPedido VALUES ('Fechado');
 INSERT INTO StatusPedido VALUES ('Cancelado');
+
 
 Exec P_GeraDadosFuncionario();
 
@@ -677,83 +684,65 @@ Exec P_GeraDadosPontuacao(70,11,22);
 
 Exec P_GeraDadosHistorico();
 
-INSERT INTO Dependente VALUES (3,'Sebastiana Maria','01/02/64','F')
-INSERT INTO Dependente VALUES (3,'Sebastião Mario','01/02/64','M')
-INSERT INTO Dependente VALUES (4,'Aurea Virtude','01/02/64','F')
-INSERT INTO Dependente VALUES (4,'Aureo Visture','01/02/64','M')
-INSERT INTO Dependente VALUES (7,'Pedro da Silva','01/02/64','F')
-INSERT INTO Dependente VALUES (7,'Alvares da Silva','01/02/64','M')
-INSERT INTO Dependente VALUES (7,'Cabral da Silva','01/02/64','M')
 
-;
+INSERT INTO Dependente VALUES (3,'Sebastiana Maria','01/02/64','F');
+INSERT INTO Dependente VALUES (3,'Sebastião Mario','01/02/64','M');
+INSERT INTO Dependente VALUES (4,'Aurea Virtude','01/02/64','F');
+INSERT INTO Dependente VALUES (4,'Aureo Visture','01/02/64','M');
+INSERT INTO Dependente VALUES (7,'Pedro da Silva','01/02/64','F');
+INSERT INTO Dependente VALUES (7,'Alvares da Silva','01/02/64','M');
+INSERT INTO Dependente VALUES (7,'Cabral da Silva','01/02/64','M');
 
-Exec P_GeraDadosPedido
-;
+Exec P_GeraDadosPedido();
 
-Exec P_Parcelas 0,300,3
-;
+Exec P_Parcelas(0,300,3);
 
-Exec P_Parcelas 301,400,4
-;
+Exec P_Parcelas(301,400,4);
 
-Exec P_Parcelas 401,500,5
-;
+Exec P_Parcelas(401,500,5);
 
-Exec P_Parcelas 501,600,6
-;
+Exec P_Parcelas(501,600,6);
 
-Exec P_Parcelas 601,700,7
-;
+Exec P_Parcelas(601,700,7);
 
-Exec P_Parcelas 701,800,8
-;
+Exec P_Parcelas(701,800,8);
 
-Exec P_Parcelas 801,900,9
-;
+Exec P_Parcelas(801,900,9);
 
-Exec P_Parcelas 901,10000,10
-;
+Exec P_Parcelas(901,10000,10);
 
-INSERT INTO TipoProd VALUES ('Primeira Linha')
-INSERT INTO TipoProd VALUES ('Segunda Linha')
-INSERT INTO TipoProd VALUES ('Terceira Linha')
-INSERT INTO TipoProd VALUES ('Quarta Linha')
-INSERT INTO TipoProd VALUES ('Quinta Linha')
 
-;
+INSERT INTO TipoProd VALUES ('Primeira Linha');
+INSERT INTO TipoProd VALUES ('Segunda Linha');
+INSERT INTO TipoProd VALUES ('Terceira Linha');
+INSERT INTO TipoProd VALUES ('Quarta Linha');
+INSERT INTO TipoProd VALUES ('Quinta Linha');
 
-INSERT INTO Produto VALUES (1,'Armário Inox',1000,1200)
-INSERT INTO Produto VALUES (1,'Armário Madeira',1000,2200)
-INSERT INTO Produto VALUES (2,'Armário Metal',1000,200)
-INSERT INTO Produto VALUES (1,'Mesa Vidro',100,1500)
-INSERT INTO Produto VALUES (3,'Mesa Fórmica',1000,200)
-INSERT INTO Produto VALUES (2,'Mesa Madeira',1000,800)
-INSERT INTO Produto VALUES (1,'Sofa Couro',500,2200)
-INSERT INTO Produto VALUES (2,'Sofa Napa',500,200)
-INSERT INTO Produto VALUES (1,'Estante Madeira',500,12200)
-INSERT INTO Produto VALUES (1,'Cama',500,1200)
-INSERT INTO Produto VALUES (1,'Geladeira',500,3200)
-INSERT INTO Produto VALUES (1,'Fogão',500,700)
 
-;
+INSERT INTO Produto VALUES (1,'Armário Inox',1000,1200);
+INSERT INTO Produto VALUES (1,'Armário Madeira',1000,2200);
+INSERT INTO Produto VALUES (2,'Armário Metal',1000,200);
+INSERT INTO Produto VALUES (1,'Mesa Vidro',100,1500);
+INSERT INTO Produto VALUES (3,'Mesa Fórmica',1000,200);
+INSERT INTO Produto VALUES (2,'Mesa Madeira',1000,800);
+INSERT INTO Produto VALUES (1,'Sofa Couro',500,2200);
+INSERT INTO Produto VALUES (2,'Sofa Napa',500,200);
+INSERT INTO Produto VALUES (1,'Estante Madeira',500,12200);
+INSERT INTO Produto VALUES (1,'Cama',500,1200);
+INSERT INTO Produto VALUES (1,'Geladeira',500,3200);
+INSERT INTO Produto VALUES (1,'Fogão',500,700);
 
-Exec P_GeraDadosItens 1,100,1
-;
+Exec P_GeraDadosItens(1,100,1);
 
-Exec P_GeraDadosItens 101,200,2
-;
+Exec P_GeraDadosItens(101,200,2);
 
-Exec P_GeraDadosItens 201,300,2
-;
+Exec P_GeraDadosItens(201,300,2);
 
-Exec P_GeraDadosItens 301,400,2
-;
+Exec P_GeraDadosItens(301,400,2);
 
-Exec P_GeraDadosItens 401,10000,3
-;
+Exec P_GeraDadosItens(401,10000,3);
 
-Exec P_GeraDadosItens 10001,10000,4
-;
+Exec P_GeraDadosItens(10001,10000,4);
 
 /****************************************************************************/
 /* Verificando a Criação da Tabelas do Database SYSAMPLES                   */
@@ -761,53 +750,53 @@ Exec P_GeraDadosItens 10001,10000,4
 
 SELECT *
 FROM Information_Schema.Tables
-WHERE Table_Type = 'Base Table'
+WHERE Table_Type = 'Base Table';
 
 /****************************************************************************/
 
-SELECT * FROM Bonus
-SELECT * FROM Cidade
-SELECT * FROM Cliente
-SELECT * FROM Conjuge
-SELECT * FROM Credito
-SELECT * FROM Dependente
-SELECT * FROM EMail
-SELECT * FROM Endereco
-SELECT * FROM Estado
-SELECT * FROM Fone
-SELECT * FROM Funcionario
-SELECT * FROM Historico
-SELECT * FROM Itens
-SELECT * FROM Parcela
-SELECT * FROM Pedido
-SELECT * FROM Pontuacao
-SELECT * FROM Produto
-SELECT * FROM StatusPedido
-SELECT * FROM TipoCli
-SELECT * FROM TipoEnd
-SELECT * FROM TipoProd
+SELECT * FROM Bonus;
+SELECT * FROM Cidade;
+SELECT * FROM Cliente;
+SELECT * FROM Conjuge;
+SELECT * FROM Credito;
+SELECT * FROM Dependente;
+SELECT * FROM EMail;
+SELECT * FROM Endereco;
+SELECT * FROM Estado;
+SELECT * FROM Fone;
+SELECT * FROM Funcionario;
+SELECT * FROM Historico;
+SELECT * FROM Itens;
+SELECT * FROM Parcela;
+SELECT * FROM Pedido;
+SELECT * FROM Pontuacao;
+SELECT * FROM Produto;
+SELECT * FROM StatusPedido;
+SELECT * FROM TipoCli;
+SELECT * FROM TipoEnd;
+SELECT * FROM TipoProd;
 
 /****************************************************************************/
 
-SELECT count(*) FROM Bonus
-SELECT count(*) FROM Cidade
-SELECT count(*) FROM Cliente
-SELECT count(*) FROM Conjuge
-SELECT count(*) FROM Credito
-SELECT count(*) FROM Dependente
-SELECT count(*) FROM EMail
-SELECT count(*) FROM Endereco
-SELECT count(*) FROM Estado
-SELECT count(*) FROM Fone
-SELECT count(*) FROM Funcionario
-SELECT count(*) FROM Historico
-SELECT count(*) FROM Itens
-SELECT count(*) FROM Parcela
-SELECT count(*) FROM Pedido
-SELECT count(*) FROM Pontuacao
-SELECT count(*) FROM Produto
-SELECT count(*) FROM StatusPedido
-SELECT count(*) FROM TipoCli
-SELECT count(*) FROM TipoEnd
-SELECT count(*) FROM TipoProd
+SELECT count(*) FROM Bonus;
+SELECT count(*) FROM Cidade;
+SELECT count(*) FROM Cliente;
+SELECT count(*) FROM Conjuge;
+SELECT count(*) FROM Credito;
+SELECT count(*) FROM Dependente;
+SELECT count(*) FROM EMail;
+SELECT count(*) FROM Endereco;
+SELECT count(*) FROM Estado;
+SELECT count(*) FROM Fone;
+SELECT count(*) FROM Funcionario;
+SELECT count(*) FROM Historico;
+SELECT count(*) FROM Itens;
+SELECT count(*) FROM Parcela;
+SELECT count(*) FROM Pedido;
+SELECT count(*) FROM Pontuacao;
+SELECT count(*) FROM Produto;
+SELECT count(*) FROM StatusPedido;
+SELECT count(*) FROM TipoCli;
+SELECT count(*) FROM TipoEnd;
+SELECT count(*) FROM TipoProd;
 
