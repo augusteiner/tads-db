@@ -23,27 +23,34 @@
  */
 
 /****************************************************************************/
-/* Criando o Database Exemplo                                               */
+/* Criando o Database exemplo                                               */
 /*  Script_01                                                               */
 /****************************************************************************/
 
-CREATE DATABASE Exemplo
+/* SET default_storage_engine=InnoDB */;
 
+/*! DROP SCHEMA IF EXISTS exemplo */;
+
+CREATE SCHEMA exemplo
+/*! DEFAULT COLLATE 'utf8mb4_general_ci' */
+/*! DEFAULT CHARSET 'utf8mb4' */
+/*! COLLATE 'utf8mb4_general_ci' */
+/*! CHARSET 'utf8mb4' */
 ;
 
 /****************************************************************************/
-/* Estabelecendo uma Conexão com o Database Exemplo                         */
+/* Estabelecendo uma Conexão com o Database exemplo                         */
 /****************************************************************************/
 
-USE Exemplo;
+/* USE exemplo */;
 
 /****************************************************************************/
 /* Criando AS tabelas do database SYSAMPLES                                 */
 /****************************************************************************/
 
-CREATE TABLE TipoEnd (
+CREATE TABLE IF NOT EXISTS exemplo.TipoEnd (
 
-  Cod_TipoEnd INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  Cod_TipoEnd SERIAL,
   Nome_TipoEnd VARCHAR(30) NOT NULL,
 
   CONSTRAINT PK_TipoEnd PRIMARY KEY (Cod_TipoEnd),
@@ -53,7 +60,7 @@ CREATE TABLE TipoEnd (
 )
 ;
 
-CREATE TABLE Estado (
+CREATE TABLE IF NOT EXISTS exemplo.Estado (
 
   Sigla_Est CHAR(02) NOT NULL,
   Nome_Est VARCHAR(100) NOT NULL,
@@ -65,9 +72,9 @@ CREATE TABLE Estado (
 )
 ;
 
-CREATE TABLE Cidade (
+CREATE TABLE IF NOT EXISTS exemplo.Cidade (
 
-  Cod_Cid INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  Cod_Cid SERIAL,
   Sigla_Est CHAR(02) NOT NULL,
   Nome_Cid VARCHAR(100) NOT NULL,
 
@@ -80,9 +87,9 @@ CREATE TABLE Cidade (
 )
 ;
 
-CREATE TABLE TipoCli (
+CREATE TABLE IF NOT EXISTS exemplo.TipoCli (
 
-  Cod_TipoCli INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  Cod_TipoCli SERIAL,
   Nome_TipoCli VARCHAR(100) NOT NULL,
 
   CONSTRAINT PK_TipoCli PRIMARY KEY (Cod_TipoCli),
@@ -92,12 +99,12 @@ CREATE TABLE TipoCli (
 )
 ;
 
-CREATE TABLE Cliente (
+CREATE TABLE IF NOT EXISTS exemplo.Cliente (
 
-  Cod_Cli INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  Cod_TipoCli INT UNSIGNED NOT NULL,
+  Cod_Cli SERIAL,
+  Cod_TipoCli BIGINT UNSIGNED NOT NULL,
   Nome_Cli VARCHAR(100) NOT NULL,
-  Data_CadCli DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Data_CadCli TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Renda_Cli DECIMAL(10,2) NOT NULL DEFAULT 0,
   Sexo_Cli CHAR(01) NOT NULL DEFAULT 'F',
 
@@ -111,9 +118,9 @@ CREATE TABLE Cliente (
 )
 ;
 
-CREATE TABLE Conjuge (
+CREATE TABLE IF NOT EXISTS exemplo.Conjuge (
 
-  Cod_Cli INT UNSIGNED NOT NULL,
+  Cod_Cli BIGINT UNSIGNED NOT NULL,
   Nome_Conj CHAR(30) NOT NULL,
   Renda_Conj DECIMAL(10,2) NOT NULL DEFAULT 0,
   Sexo_Conj CHAR(01) NOT NULL DEFAULT 'M',
@@ -128,12 +135,12 @@ CREATE TABLE Conjuge (
 )
 ;
 
-CREATE TABLE Endereco (
+CREATE TABLE IF NOT EXISTS exemplo.Endereco (
 
-  Cod_End INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  Cod_TipoEnd INT UNSIGNED NOT NULL,
-  Cod_Cid INT UNSIGNED NOT NULL,
-  Cod_Cli INT UNSIGNED NOT NULL,
+  Cod_End SERIAL,
+  Cod_TipoEnd BIGINT UNSIGNED NOT NULL,
+  Cod_Cid BIGINT UNSIGNED NOT NULL,
+  Cod_Cli BIGINT UNSIGNED NOT NULL,
   Nome_Rua VARCHAR(100) NOT NULL,
   Nome_Bairro VARCHAR(100) NOT NULL,
   Compl_End VARCHAR(100) NULL,
@@ -147,10 +154,10 @@ CREATE TABLE Endereco (
 )
 ;
 
-CREATE TABLE Credito (
+CREATE TABLE IF NOT EXISTS exemplo.Credito (
 
-  Num_Lanc INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  Cod_Cli INT UNSIGNED NOT NULL,
+  Num_Lanc SERIAL,
+  Cod_Cli BIGINT UNSIGNED NOT NULL,
   Cred_Cli DECIMAL(10,2) NOT NULL,
   Data_CredCli DATETIME NOT NULL,
 
@@ -163,10 +170,10 @@ CREATE TABLE Credito (
 )
 ;
 
-CREATE TABLE Fone (
+CREATE TABLE IF NOT EXISTS exemplo.Fone (
 
-  Num_Lanc INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  Cod_Cli INT UNSIGNED NOT NULL,
+  Num_Lanc SERIAL,
+  Cod_Cli BIGINT UNSIGNED NOT NULL,
   Num_Fone CHAR(10) NOT NULL,
   Num_DDD CHAR(05) NOT NULL DEFAULT '011',
 
@@ -177,10 +184,10 @@ CREATE TABLE Fone (
 )
 ;
 
-CREATE TABLE EMail (
+CREATE TABLE IF NOT EXISTS exemplo.EMail (
 
-  Num_Lanc INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  Cod_Cli INT UNSIGNED NOT NULL,
+  Num_Lanc SERIAL,
+  Cod_Cli BIGINT UNSIGNED NOT NULL,
   EMail_Cli VARCHAR(255) NOT NULL,
 
   CONSTRAINT PK_Email PRIMARY KEY (Num_Lanc),
@@ -190,9 +197,9 @@ CREATE TABLE EMail (
 )
 ;
 
-CREATE TABLE StatusPedido (
+CREATE TABLE IF NOT EXISTS exemplo.StatusPedido (
 
-  Cod_Sta SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  Cod_Sta BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   Sta_Ped VARCHAR(100) NOT NULL,
 
   CONSTRAINT PK_StatusPed PRIMARY KEY (Cod_Sta),
@@ -202,63 +209,63 @@ CREATE TABLE StatusPedido (
 )
 ;
 
-CREATE TABLE Funcionario (
+CREATE TABLE IF NOT EXISTS exemplo.Funcionario (
 
-  Cod_Func INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  Cod_Func SERIAL,
   Nome_Func VARCHAR(100) NOT NULL,
-  Data_CadFunc DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Data_CadFunc TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Sexo_Func CHAR(01) NOT NULL DEFAULT 'F',
   Sal_Func DECIMAL(10,2) NOT NULL DEFAULT 200,
   End_Func VARCHAR(100) NOT NULL,
 
   CONSTRAINT PK_Func PRIMARY KEY (Cod_Func),
 
-  CONSTRAINT CH_Func1 CHECK (Data_CadFunc >= CURDATE()),
+  -- CONSTRAINT CH_Func1 CHECK (Data_CadFunc >= CURDATE()),
   CONSTRAINT CH_Func2 CHECK (Sexo_Func IN ('F', 'M')),
   CONSTRAINT CH_Func3 CHECK (Sal_Func >= 0)
 
 )
 ;
 
-CREATE TABLE Bonus (
+CREATE TABLE IF NOT EXISTS exemplo.Bonus (
 
-  Num_Lanc INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  Cod_Func INT UNSIGNED NOT NULL,
-  Data_Bonus DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Num_Lanc SERIAL,
+  Cod_Func BIGINT UNSIGNED NOT NULL,
+  Data_Bonus TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Val_Bonus DECIMAL(10,2) NOT NULL,
 
   CONSTRAINT PK_Bonus PRIMARY KEY (Num_Lanc),
 
   CONSTRAINT FK_Bonus FOREIGN KEY (Cod_Func) REFERENCES Funcionario (Cod_Func),
 
-  CONSTRAINT CH_Bonus1 CHECK (Data_Bonus >= CURDATE()),
+  -- CONSTRAINT CH_Bonus1 CHECK (Data_Bonus >= CURDATE()),
   CONSTRAINT CH_Bonus2 CHECK (Val_Bonus > 0)
 
 )
 ;
 
-CREATE TABLE Pontuacao (
+CREATE TABLE IF NOT EXISTS exemplo.Pontuacao (
 
-  Num_Lanc INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  Cod_Func INT UNSIGNED NOT NULL,
-  Data_Pto DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Num_Lanc SERIAL,
+  Cod_Func BIGINT UNSIGNED NOT NULL,
+  Data_Pto TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Pto_Func DECIMAL(4,2) NOT NULL,
 
   CONSTRAINT PK_Pto PRIMARY KEY (Num_Lanc),
 
   CONSTRAINT FK_Pto FOREIGN KEY (Cod_Func) REFERENCES Funcionario (Cod_Func),
 
-  CONSTRAINT CH_Pto1 CHECK (Data_Pto >= CURDATE()),
+  -- CONSTRAINT CH_Pto1 CHECK (Data_Pto >= CURDATE()),
   CONSTRAINT CH_Pto2 CHECK (Pto_Func > 0)
 
 )
 ;
 
-CREATE TABLE Historico (
+CREATE TABLE IF NOT EXISTS exemplo.Historico (
 
-  Num_Lanc INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  Cod_Func INT UNSIGNED NOT NULL,
-  Data_Hist DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Num_Lanc SERIAL,
+  Cod_Func BIGINT UNSIGNED NOT NULL,
+  Data_Hist TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Sal_Ant DECIMAL(10,2) NOT NULL,
   Sal_Atual DECIMAL(10,2) NOT NULL,
 
@@ -266,17 +273,17 @@ CREATE TABLE Historico (
 
   CONSTRAINT FK_Hist FOREIGN KEY (Cod_Func) REFERENCES Funcionario (Cod_Func),
 
-  CONSTRAINT CH_Hist1 CHECK (Data_Hist >= CURDATE()),
+  -- CONSTRAINT CH_Hist1 CHECK (Data_Hist >= CURDATE()),
   CONSTRAINT CH_Hist2 CHECK (Sal_Ant >= 0),
   CONSTRAINT CH_Hist3 CHECK (Sal_Ant > 0)
 
 )
 ;
 
-CREATE TABLE Dependente (
+CREATE TABLE IF NOT EXISTS exemplo.Dependente (
 
-  Cod_Dep INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  Cod_Func INT UNSIGNED NOT NULL,
+  Cod_Dep SERIAL,
+  Cod_Func BIGINT UNSIGNED NOT NULL,
   Nome_Dep VARCHAR(100) NOT NULL,
   Data_NascDep DATETIME NOT NULL,
   Sexo_Dep CHAR(01) NOT NULL DEFAULT 'F',
@@ -290,56 +297,57 @@ CREATE TABLE Dependente (
 )
 ;
 
-CREATE TABLE Pedido (
+CREATE TABLE IF NOT EXISTS exemplo.Pedido (
 
-  Num_Ped INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  Cod_Cli INT UNSIGNED NOT NULL,
-  Cod_Func INT UNSIGNED NOT NULL,
-  Cod_Sta SMALLINT UNSIGNED NOT NULL,
-  Data_Ped DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Num_Ped SERIAL,
+  Cod_Cli BIGINT UNSIGNED NOT NULL,
+  Cod_Func BIGINT UNSIGNED NOT NULL,
+  Cod_Sta BIGINT UNSIGNED NOT NULL,
+  Data_Ped TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Val_Ped DECIMAL(10,2) NOT NULL DEFAULT 0,
 
   CONSTRAINT PK_Pedido PRIMARY KEY (Num_Ped),
 
   CONSTRAINT FK_Pedido1 FOREIGN KEY (Cod_Cli) REFERENCES Cliente (Cod_Cli),
-  CONSTRAINT FK_Pedido2 FOREIGN KEY (Cod_Cli) REFERENCES Funcionario (Cod_Func),
+  CONSTRAINT FK_Pedido2 FOREIGN KEY (Cod_Func) REFERENCES Funcionario (Cod_Func),
 
-  CONSTRAINT CH_Pedido1 CHECK (Data_Ped >= CURDATE()),
+  -- CONSTRAINT CH_Pedido1 CHECK (Data_Ped >= CURDATE()),
   CONSTRAINT CH_Pedido2 CHECK (Val_Ped >=0)
 
 )
 ;
 
-CREATE TABLE Parcela (
+CREATE TABLE IF NOT EXISTS exemplo.Parcela (
 
-  Num_Par SMALLINT UNSIGNED NOT NULL,
-  Num_Ped INT UNSIGNED NOT NULL,
-  Data_Venc DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Num_Par BIGINT UNSIGNED NOT NULL,
+  Num_Ped BIGINT UNSIGNED NOT NULL,
+  Data_Venc TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Val_Venc DECIMAL(10,2) NOT NULL,
   Data_Pgto DATETIME NULL,
   Val_Pgto DECIMAL(10,2) AS (
-    CASE
-      WHEN Data_Pgto < Data_Venc THEN
+    CASE Data_Pgto < Data_Venc WHEN TRUE THEN
         Val_Venc * 0.9
-      WHEN Data_Pgto = Data_Venc THEN
+    ELSE
+      CASE Data_Pgto = Data_Venc WHEN TRUE THEN
         Val_Venc
-      WHEN Data_Pgto > Data_Venc THEN
+      ELSE
         Val_Venc * 1.1
+      END
     END),
 
   CONSTRAINT PK_Parcela PRIMARY KEY (Num_Par,Num_Ped),
 
   CONSTRAINT FK_Parcela FOREIGN KEY (Num_Ped) REFERENCES Pedido (Num_Ped),
 
-  CONSTRAINT CH_Parcela1 CHECK (Data_Venc >= CURDATE()),
+  -- CONSTRAINT CH_Parcela1 CHECK (Data_Venc >= CURDATE()),
   CONSTRAINT CH_Parcela2 CHECK (Val_Venc >= 0)
 
 )
 ;
 
-CREATE TABLE TipoProd (
+CREATE TABLE IF NOT EXISTS exemplo.TipoProd (
 
-  Cod_TipoProd INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  Cod_TipoProd SERIAL,
   Nome_TipoProd VARCHAR(100) NOT NULL,
 
   CONSTRAINT PK_TipoProd PRIMARY KEY (Cod_TipoProd),
@@ -349,12 +357,12 @@ CREATE TABLE TipoProd (
 )
 ;
 
-CREATE TABLE Produto (
+CREATE TABLE IF NOT EXISTS exemplo.Produto (
 
-  Cod_Prod INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  Cod_TipoProd INT UNSIGNED NOT NULL,
+  Cod_Prod SERIAL,
+  Cod_TipoProd BIGINT UNSIGNED NOT NULL,
   Nome_Prod VARCHAR(100) NOT NULL,
-  Qtd_EstqProd INT UNSIGNED NOT NULL DEFAULT 0,
+  Qtd_EstqProd BIGINT UNSIGNED NOT NULL DEFAULT 0,
   Val_UnitProd DECIMAL(10,2) NOT NULL Check (Val_UnitProd > 0),
   Val_Total DECIMAL(10,2) AS (Qtd_EstqProd * Val_UnitProd),
 
@@ -370,11 +378,11 @@ CREATE TABLE Produto (
 )
 ;
 
-CREATE TABLE Itens (
+CREATE TABLE IF NOT EXISTS exemplo.Itens (
 
-  Num_Ped INT UNSIGNED NOT NULL,
-  Cod_Prod INT UNSIGNED NOT NULL,
-  Qtd_Vend INT UNSIGNED NOT NULL,
+  Num_Ped BIGINT UNSIGNED NOT NULL,
+  Cod_Prod BIGINT UNSIGNED NOT NULL,
+  Qtd_Vend BIGINT UNSIGNED NOT NULL,
   Val_Vend DECIMAL(10,2) NOT NULL,
 
   CONSTRAINT PK_Itens PRIMARY KEY (Num_Ped,Cod_Prod),

@@ -45,28 +45,28 @@ BEGIN
   INSERT INTO Funcionario (
     Nome_Func, Data_CadFunc, Sexo_Func, Sal_Func, End_Func)
   VALUES
-    ('Antonio Antonino Antones', '01/02/00', 'M', 1500.00, 'Rua A '),
-    ('Amaro Merico Vespucio', '02/02/00', 'M', 2500.00, 'Rua B'),
-    ('Abílio Abel Garcia', '03/02/01', 'M', 1000.00, 'Rua C'),
-    ('Bia Bianca Bones', '04/03/01', 'F', 5000.25, 'Rua D'),
-    ('Beatriz Bertioga', '05/05/01', 'F', 300.00, 'Rua E'),
-    ('Caio Cesar Cearez', '06/05/01', 'M', 250.00, 'Rua F'),
-    ('Celso Cesare', '07/06/01', 'M', 1542.36, 'Rua J'),
-    ('Danilo Douglas', '08/06/01', 'M', 1524.56, 'Rua K'),
-    ('Denis Denilo', '09/07/01', 'M', 5235.56, 'Rua L'),
-    ('Everton Evaristo', '10/07/01', 'M', 2542.25, 'Rua M'),
-    ('Evanir Eva', '11/08/01', 'M', 4523.54, 'Rua N'),
-    ('Fabio Fabricio', '12/08/01', 'M', 1524.25, 'Rua O'),
-    ('Fabiola Fabiolo', '02/01/02', 'F', 2554.25, 'Rua P'),
-    ('Geraldo Gomes', '03/010/02', 'M', 1542.25, 'Rua Q'),
-    ('Helio Heliópolis', '04/01/02', 'M', 1542.23, 'Rua R'),
-    ('Irineu Irene', '05/02/02', 'M', 2523.00, 'Rua S'),
-    ('Jonas jackes', '05/02/02', 'M', 2500.00, 'Rua T'),
-    ('Leandro Lago', '06/02/02', 'M', 1500.00, 'Rua U'),
-    ('Lucio Lacio', '07/03/02', 'M', 2500.00, 'Rua V'),
-    ('Lecio Licio', '08/04/02', 'M', 1420.00, 'Rua X'),
-    ('Mario Mendes', '06/02/02', 'M', 1262.00, 'Rua W'),
-    ('Olavo Odavlas', '07/07/02', 'M', 1540.00, 'Rua Y')
+    ('Antonio Antonino Antones', '00-02-01', 'M', 1500.00, 'Rua A '),
+    ('Amaro Merico Vespucio', '00-02-02', 'M', 2500.00, 'Rua B'),
+    ('Abílio Abel Garcia', '01-02-03', 'M', 1000.00, 'Rua C'),
+    ('Bia Bianca Bones', '01-03-04', 'F', 5000.25, 'Rua D'),
+    ('Beatriz Bertioga', '01-05-05', 'F', 300.00, 'Rua E'),
+    ('Caio Cesar Cearez', '01-05-06', 'M', 250.00, 'Rua F'),
+    ('Celso Cesare', '01-06-07', 'M', 1542.36, 'Rua J'),
+    ('Danilo Douglas', '01-06-08', 'M', 1524.56, 'Rua K'),
+    ('Denis Denilo', '01-07-09', 'M', 5235.56, 'Rua L'),
+    ('Everton Evaristo', '01-07-10', 'M', 2542.25, 'Rua M'),
+    ('Evanir Eva', '01-08-11', 'M', 4523.54, 'Rua N'),
+    ('Fabio Fabricio', '01-08-12', 'M', 1524.25, 'Rua O'),
+    ('Fabiola Fabiolo', '02-01-02', 'F', 2554.25, 'Rua P'),
+    ('Geraldo Gomes', '02-010-03', 'M', 1542.25, 'Rua Q'),
+    ('Helio Heliópolis', '02-01-04', 'M', 1542.23, 'Rua R'),
+    ('Irineu Irene', '02-02-05', 'M', 2523.00, 'Rua S'),
+    ('Jonas jackes', '02-02-05', 'M', 2500.00, 'Rua T'),
+    ('Leandro Lago', '02-02-06', 'M', 1500.00, 'Rua U'),
+    ('Lucio Lacio', '02-03-07', 'M', 2500.00, 'Rua V'),
+    ('Lecio Licio', '02-04-08', 'M', 1420.00, 'Rua X'),
+    ('Mario Mendes', '02-02-06', 'M', 1262.00, 'Rua W'),
+    ('Olavo Odavlas', '02-07-07', 'M', 1540.00, 'Rua Y')
 
 ;
 
@@ -86,28 +86,9 @@ BEGIN
   -- ALTER TABLE Bonus
   -- NOCHECK CONSTRAINT CH_Bonus1;
 
-  DECLARE Cod_Func INT;
-
-  DECLARE Cursor_Funcionario CURSOR FOR
-    SELECT Cod_Func FROM Funcionario;
-
-  DECLARE CONTINUE HANDLER
-    FOR NOT FOUND
-    SET @Fetch_Status = 1;
-
-  OPEN Cursor_Funcionario;
-
-  WHILE @Fetch_Status = 0 DO
-
-    FETCH Cursor_Funcionario
-    INTO Cod_Func;
-
-    INSERT INTO Bonus (Cod_Func, Data_Bonus, Val_Bonus)
-    VALUES (Cod_Func, DATE_SUB(CURDATE(), INTERVAL 30 DAY), Val_Bonus);
-
-  END WHILE;
-
-  CLOSE Cursor_Funcionario;
+  INSERT INTO Bonus (Cod_Func, Data_Bonus, Val_Bonus)
+  SELECT Cod_Func, CURDATE() - INTERVAL 30 DAY, Val_Bonus
+  FROM Funcionario;
 
   -- ALTER TABLE Bonus
   -- NOCHECK CONSTRAINT CH_Bonus1;
@@ -126,30 +107,9 @@ BEGIN
   -- ALTER TABLE Pontuacao
   -- NOCHECK CONSTRAINT CH_Pto1;
 
-  DECLARE Cod_Func INT;
-
-  DECLARE Cursor_Funcionario CURSOR FOR
-    SELECT Cod_Func
-    FROM Funcionario
-    WHERE Cod_Func BETWEEN Cod_Func1 AND Cod_Func2;
-
-  DECLARE CONTINUE HANDLER
-    FOR NOT FOUND
-    SET @Fetch_Status = 1;
-
-  OPEN Cursor_Funcionario;
-
-  WHILE @Fetch_Status = 0 DO
-
-    FETCH Cursor_Funcionario
-    INTO Cod_Func;
-
-    INSERT INTO Pontuacao (Cod_Func, Data_Pto, Pto_Func)
-    VALUES (Cod_Func, DATE_SUB(CURDATE(), INTERVAL 30 DAY), Val_Pontos);
-
-  END WHILE;
-
-  CLOSE Cursor_Funcionario;
+  INSERT INTO Pontuacao (Cod_Func, Data_Pto, Pto_Func)
+  SELECT Cod_Func, DATE_SUB(CURDATE(), INTERVAL 30 DAY), Val_Pontos
+  FROM Funcionario;
 
   -- ALTER TABLE Pontuacao
   -- NOCHECK CONSTRAINT CH_Pto1;
@@ -183,58 +143,9 @@ BEGIN
   -- ALTER TABLE Pedido
   -- NOCHECK CONSTRAINT CH_Pedido1, FK_Pedido1, FK_Pedido2;
 
-  DECLARE Cod_Func INT;
-  DECLARE Cod_Cli INT;
-  DECLARE Cod_Sta INT;
-  DECLARE Data Varchar(255);
-  DECLARE DataPed DATETIME;
-  DECLARE Cod_CliLim INT;
-  DECLARE Cod_StaLim INT;
-  DECLARE Cod_FuncLim INT;
-
-  SELECT Max(Cod_Func)
-  FROM Funcionario
-  INTO Cod_FuncLim;
-
-  SELECT Max(Cod_Cli)
-  FROM Cliente
-  INTO Cod_CliLim;
-
-  SELECT Max(Cod_Sta)
-  FROM StatusPedido
-  INTO Cod_StaLim;
-
-  SET Cod_Func = 1;
-  SET Cod_Cli = 1;
-  SET Cod_Sta = 1;
-
-  WHILE Cod_Func < Cod_FuncLim DO
-
-    WHILE Cod_Cli < Cod_CliLim DO
-
-      WHILE Cod_Sta <= Cod_StaLim DO
-
-        SET Data = CONVERT(MONTH(DATEADD(mm, Cod_Sta * 2, CURDATE())), CHAR(02));
-        SET Data = CONCAT(Data, '/', CONVERT(DAY(DATE_SUB(CURDATE(), DATE_SUB(CURDATE(), INTERVAL (Cod_Sta * 3) DAY), CHAR(02)));
-        SET Data = CONCAT(Data, '/', CONVERT(YEAR(DATEADD(YY, -1 * Cod_Sta, CURDATE())), CHAR(04)));
-        SET DataPed = CONVERT(Data, DATETIME);
-
-        INSERT INTO Pedido (Cod_Cli, Cod_Func, Cod_Sta, Data_Ped, Val_Ped)
-        VALUES ( Cod_Cli, Cod_Func, Cod_Sta, Data, 100 * Cod_Cli);
-
-        SET Cod_Sta = Cod_Sta + 1;
-
-      END WHILE;
-
-      SET Cod_Cli = Cod_Cli + 1;
-      SET Cod_Sta = 1;
-
-    END WHILE;
-
-    SET Cod_Func = Cod_Func + 1;
-    SET Cod_Cli = 1;
-
-  END WHILE;
+  INSERT INTO Pedido (Cod_Cli, Cod_Func, Cod_Sta, Data_Ped, Val_Ped)
+  SELECT Cod_Cli, Cod_Func, Cod_Sta, CURDATE() - INTERVAL 1 YEAR, Cod_Cli * 100
+  FROM Cliente, Funcionario, StatusPedido;
 
   -- ALTER TABLE Pedido
   -- NOCHECK CONSTRAINT CH_Pedido1, FK_Pedido1, FK_Pedido2;
@@ -282,7 +193,7 @@ BEGIN
     FROM Pedido
     WHERE Val_Ped between Val_Lim1 AND Val_Lim2;
 
-  SELECT TotLim = Count(*)
+  SELECT TotLim = COUNT(*)
   FROM Tabela;
 
   WHILE Cont <= TotLim DO
@@ -408,68 +319,68 @@ VALUES
 
 INSERT INTO Cliente (Cod_TipoCli, Nome_Cli, Data_CadCli, Renda_Cli, Sexo_Cli)
 VALUES
-  (1, 'João Carlos', '01/01/1999', 10000, 'M'),
-  (1, 'Daniel Souza', '02/02/1999', 10000, 'M'),
-  (1, 'Helena Oliveira', '03/03/1999', 9000, 'F'),
-  (1, 'Roberta Oliveira', '04/04/1999', 8000, 'F'),
-  (2, 'Renata Leão', '05/05/1999', 5000, 'F'),
-  (2, 'Jairo Gato', '06/06/1999', 4000, 'M'),
-  (3, 'Fernando Gato', '07/07/1999', 3000, 'M'),
-  (3, 'Giovanna Silva Leão', '08/08/1999', 3000, 'F'),
-  (4, 'Lucas Ribeiro', '09/09/1999', 2000, 'M'),
-  (3, 'Helder Leão', '10/10/1999', 2000, 'M'),
-  (2, 'Olga Cristina Bonfiglioli', '11/11/1999', 8000, 'F'),
-  (1, 'Maria Cristina Bonfiglioli Martins de Souza Santos', '12/12/1999', 5000, 'F'),
-  (1, 'Salvador Eneas Feredico', '01/13/1999', 9000, 'M'),
-  (1, 'Dolores Gerreiro Martins', '02/14/2000', 8000, 'F'),
-  (1, 'Fabiana Bataglin', '03/15/2000', 5000, 'F'),
-  (2, 'Aparecida Ribeiro', '04/16/2000', 3000, 'F'),
-  (3, 'Reginaldo Ribeiro', '05/17/2000', 4000, 'M'),
-  (4, 'Suellen M Nunes', '06/18/2000', 3000, 'F'),
-  (1, 'Carlos Alberto', '07/19/2000', 2000, 'M'),
-  (2, 'Roberto Arruda', '08/20/2000', 1000, 'M'),
-  (3, 'Sandra Medeiros', '09/21/2000', 1500, 'F'),
-  (4, 'Alice Santos', '10/22/2001', 2500, 'F'),
-  (5, 'Valter Sanches', '11/23/2001', 3500, 'M'),
-  (6, 'Pascoal Babiera', '12/24/2001', 1525, 'M'),
-  (1, 'Lucia Bacalla', '01/25/2001', 6321, 'F'),
-  (3, 'Maria Belido', '02/26/2001', 5412, 'F'),
-  (4, 'Hamilton Belico', '03/26/2001', 2563, 'M'),
-  (5, 'Alberto Belli', '04/27/2001', 2412, 'M'),
-  (6, 'Marcia Bueno', '05/28/2001', 1235, 'F'),
-  (1, 'Maria Catta', '06/29/2001', 1236, 'F'),
-  (2, 'Carlos Cattaneo', '07/30/2001', 1253, 'M'),
-  (3, 'Andre Caula', '08/31/2001', 1524, 'M'),
-  (4, 'Fabia Dávello', '09/01/2001', 1236, 'F'),
-  (5, 'Afonso Ferraro', '10/02/2001', 1256, 'M'),
-  (6, 'Akemi Fukamizu', '11/03/2001', 1452, 'F'),
-  (1, 'Bernadino Gomes', '12/04/2001', 11785, 'M'),
-  (2, 'Regiani Hoki', '01/05/2001', 1524, 'F'),
-  (3, 'Valter Koszura', '02/06/2001', 1256, 'M'),
-  (4, 'Alexandre Kozeki', '03/07/2001', 1225, 'M'),
-  (5, 'Vittorio Lannocca', '04/08/2001', 1253, 'M'),
-  (6, 'Domingos Lanini', '05/09/2002', 1253, 'M'),
-  (1, 'Paulo Mello', '06/10/2001', 10000, 'M'),
-  (2, 'Zilda Mellone', '07/11/2001', 8000, 'F'),
-  (3, 'Marlene Moura', '08/12/2001', 3000, 'F'),
-  (4, 'Francisca Oliveira', '09/13/2001', 2300, 'F'),
-  (5, 'Marlene Pereira', '10/14/2001', 2562, 'F'),
-  (6, 'Milton Pereira', '11/15/2001', 2563, 'M'),
-  (1, 'Ligia Ramos', '12/16/2001', 9200, 'F'),
-  (2, 'Mariangela Ramos', '01/17/2001', 7000, 'F'),
-  (3, 'Dora Romariz', '02/18/2001', 5263, 'F'),
-  (4, 'Paulino Romelli', '03/19/2001', 5428, 'M'),
-  (5, 'Fernando Sampaio', '04/20/2001', 2023, 'M'),
-  (6, 'José Sampaio', '05/21/2001', 2235, 'M'),
-  (1, 'Vicenzo Senatori', '06/22/2001', 7000, 'M'),
-  (2, 'Geraldo Senedeze', '07/23/2001', 2531, 'M'),
-  (3, 'Mauro Soares', '08/24/2001', 2532, 'M'),
-  (4, 'Paulo Souza', '09/25/2001', 2542, 'M'),
-  (5, 'Emidio Trifoni', '10/26/2001', 2563, 'M'),
-  (6, 'Heitor Vernile', '11/27/2001', 2542, 'M'),
-  (1, 'Carlos Saura', '12/28/2001', 6000, 'M'),
-  (2, 'Angelino Saullo', '01/29/2001', 5000, 'M'),
-  (3, 'Aldo Savazzoni', '02/28/2001', 4000, 'M')
+  (1, 'João Carlos', '1999-01-01', 10000, 'M'),
+  (1, 'Daniel Souza', '1999-02-02', 10000, 'M'),
+  (1, 'Helena Oliveira', '1999-03-03', 9000, 'F'),
+  (1, 'Roberta Oliveira', '1999-04-04', 8000, 'F'),
+  (2, 'Renata Leão', '1999-05-05', 5000, 'F'),
+  (2, 'Jairo Gato', '1999-06-06', 4000, 'M'),
+  (3, 'Fernando Gato', '1999-07-07', 3000, 'M'),
+  (3, 'Giovanna Silva Leão', '1999-08-08', 3000, 'F'),
+  (4, 'Lucas Ribeiro', '1999-09-09', 2000, 'M'),
+  (3, 'Helder Leão', '1999-10-10', 2000, 'M'),
+  (2, 'Olga Cristina Bonfiglioli', '1999-11-11', 8000, 'F'),
+  (1, 'Maria Cristina Bonfiglioli Martins de Souza Santos', '1999-12-12', 5000, 'F'),
+  (1, 'Salvador Eneas Feredico', '1999-13-01', 9000, 'M'),
+  (1, 'Dolores Gerreiro Martins', '2000-14-02', 8000, 'F'),
+  (1, 'Fabiana Bataglin', '2000-15-03', 5000, 'F'),
+  (2, 'Aparecida Ribeiro', '2000-16-04', 3000, 'F'),
+  (3, 'Reginaldo Ribeiro', '2000-17-05', 4000, 'M'),
+  (4, 'Suellen M Nunes', '2000-18-06', 3000, 'F'),
+  (1, 'Carlos Alberto', '2000-19-07', 2000, 'M'),
+  (2, 'Roberto Arruda', '2000-20-08', 1000, 'M'),
+  (3, 'Sandra Medeiros', '2000-21-09', 1500, 'F'),
+  (4, 'Alice Santos', '2001-22-10', 2500, 'F'),
+  (5, 'Valter Sanches', '2001-23-11', 3500, 'M'),
+  (6, 'Pascoal Babiera', '2001-24-12', 1525, 'M'),
+  (1, 'Lucia Bacalla', '2001-25-01', 6321, 'F'),
+  (3, 'Maria Belido', '2001-26-02', 5412, 'F'),
+  (4, 'Hamilton Belico', '2001-26-03', 2563, 'M'),
+  (5, 'Alberto Belli', '2001-27-04', 2412, 'M'),
+  (6, 'Marcia Bueno', '2001-28-05', 1235, 'F'),
+  (1, 'Maria Catta', '2001-29-06', 1236, 'F'),
+  (2, 'Carlos Cattaneo', '2001-30-07', 1253, 'M'),
+  (3, 'Andre Caula', '2001-31-08', 1524, 'M'),
+  (4, 'Fabia Dávello', '2001-01-09', 1236, 'F'),
+  (5, 'Afonso Ferraro', '2001-02-10', 1256, 'M'),
+  (6, 'Akemi Fukamizu', '2001-03-11', 1452, 'F'),
+  (1, 'Bernadino Gomes', '2001-04-12', 11785, 'M'),
+  (2, 'Regiani Hoki', '2001-05-01', 1524, 'F'),
+  (3, 'Valter Koszura', '2001-06-02', 1256, 'M'),
+  (4, 'Alexandre Kozeki', '2001-07-03', 1225, 'M'),
+  (5, 'Vittorio Lannocca', '2001-08-04', 1253, 'M'),
+  (6, 'Domingos Lanini', '2002-09-05', 1253, 'M'),
+  (1, 'Paulo Mello', '2001-10-06', 10000, 'M'),
+  (2, 'Zilda Mellone', '2001-11-07', 8000, 'F'),
+  (3, 'Marlene Moura', '2001-12-08', 3000, 'F'),
+  (4, 'Francisca Oliveira', '2001-13-09', 2300, 'F'),
+  (5, 'Marlene Pereira', '2001-14-10', 2562, 'F'),
+  (6, 'Milton Pereira', '2001-15-11', 2563, 'M'),
+  (1, 'Ligia Ramos', '2001-16-12', 9200, 'F'),
+  (2, 'Mariangela Ramos', '2001-17-01', 7000, 'F'),
+  (3, 'Dora Romariz', '2001-18-02', 5263, 'F'),
+  (4, 'Paulino Romelli', '2001-19-03', 5428, 'M'),
+  (5, 'Fernando Sampaio', '2001-20-04', 2023, 'M'),
+  (6, 'José Sampaio', '2001-21-05', 2235, 'M'),
+  (1, 'Vicenzo Senatori', '2001-22-06', 7000, 'M'),
+  (2, 'Geraldo Senedeze', '2001-23-07', 2531, 'M'),
+  (3, 'Mauro Soares', '2001-24-08', 2532, 'M'),
+  (4, 'Paulo Souza', '2001-25-09', 2542, 'M'),
+  (5, 'Emidio Trifoni', '2001-26-10', 2563, 'M'),
+  (6, 'Heitor Vernile', '2001-27-11', 2542, 'M'),
+  (1, 'Carlos Saura', '2001-28-12', 6000, 'M'),
+  (2, 'Angelino Saullo', '2001-29-01', 5000, 'M'),
+  (3, 'Aldo Savazzoni', '2001-28-02', 4000, 'M')
 
 ;
 
@@ -755,13 +666,13 @@ CALL P_GeraDadosHistorico();
 
 INSERT INTO Dependente (Cod_Func, Nome_Dep, Data_NascDep, Sexo_Dep)
 VALUES
-  (3, 'Sebastiana Maria', '01/02/64', 'F'),
-  (3, 'Sebastião Mario', '01/02/64', 'M'),
-  (4, 'Aurea Virtude', '01/02/64', 'F'),
-  (4, 'Aureo Visture', '01/02/64', 'M'),
-  (7, 'Pedro da Silva', '01/02/64', 'F'),
-  (7, 'Alvares da Silva', '01/02/64', 'M'),
-  (7, 'Cabral da Silva', '01/02/64', 'M')
+  (3, 'Sebastiana Maria', '64-02-01', 'F'),
+  (3, 'Sebastião Mario', '64-02-01', 'M'),
+  (4, 'Aurea Virtude', '64-02-01', 'F'),
+  (4, 'Aureo Visture', '64-02-01', 'M'),
+  (7, 'Pedro da Silva', '64-02-01', 'F'),
+  (7, 'Alvares da Silva', '64-02-01', 'M'),
+  (7, 'Cabral da Silva', '64-02-01', 'M')
 
 ;
 
@@ -858,25 +769,25 @@ SELECT * FROM TipoProd;
 
 /****************************************************************************/
 
-SELECT count(*) FROM Bonus;
-SELECT count(*) FROM Cidade;
-SELECT count(*) FROM Cliente;
-SELECT count(*) FROM Conjuge;
-SELECT count(*) FROM Credito;
-SELECT count(*) FROM Dependente;
-SELECT count(*) FROM EMail;
-SELECT count(*) FROM Endereco;
-SELECT count(*) FROM Estado;
-SELECT count(*) FROM Fone;
-SELECT count(*) FROM Funcionario;
-SELECT count(*) FROM Historico;
-SELECT count(*) FROM Itens;
-SELECT count(*) FROM Parcela;
-SELECT count(*) FROM Pedido;
-SELECT count(*) FROM Pontuacao;
-SELECT count(*) FROM Produto;
-SELECT count(*) FROM StatusPedido;
-SELECT count(*) FROM TipoCli;
-SELECT count(*) FROM TipoEnd;
-SELECT count(*) FROM TipoProd;
+SELECT COUNT(*) FROM Bonus;
+SELECT COUNT(*) FROM Cidade;
+SELECT COUNT(*) FROM Cliente;
+SELECT COUNT(*) FROM Conjuge;
+SELECT COUNT(*) FROM Credito;
+SELECT COUNT(*) FROM Dependente;
+SELECT COUNT(*) FROM EMail;
+SELECT COUNT(*) FROM Endereco;
+SELECT COUNT(*) FROM Estado;
+SELECT COUNT(*) FROM Fone;
+SELECT COUNT(*) FROM Funcionario;
+SELECT COUNT(*) FROM Historico;
+SELECT COUNT(*) FROM Itens;
+SELECT COUNT(*) FROM Parcela;
+SELECT COUNT(*) FROM Pedido;
+SELECT COUNT(*) FROM Pontuacao;
+SELECT COUNT(*) FROM Produto;
+SELECT COUNT(*) FROM StatusPedido;
+SELECT COUNT(*) FROM TipoCli;
+SELECT COUNT(*) FROM TipoEnd;
+SELECT COUNT(*) FROM TipoProd;
 
