@@ -173,7 +173,7 @@ BEGIN
   CREATE TEMPORARY TABLE Tabela (
 
     Linha INT AUTO_INCREMENT,
-    Num_Par SMALLINT,
+    Num_Par SMALLINT NULL DEFAULT NULL,
     Num_Ped INT,
     Data_Venc DATETIME,
     Val_Ped DECIMAL(10, 2),
@@ -189,7 +189,7 @@ BEGIN
   SET Cont2 = 1;
 
   INSERT INTO Tabela (Num_Par, Num_Ped, Data_Venc, Val_Ped, Val_Par, Data_Pgto, Val_Pgto)
-    SELECT null, Num_Ped, Data_Ped, Val_Ped, CONVERT(Val_Ped / 3, DECIMAL(10, 2)), null, null
+    SELECT 1, Num_Ped, Data_Ped, Val_Ped, CONVERT(Val_Ped / 3, DECIMAL(10, 2)), null, null
     FROM Pedido
     WHERE Val_Ped between Val_Lim1 AND Val_Lim2;
 
@@ -202,7 +202,7 @@ BEGIN
 
       UPDATE Tabela
       SET Num_Par = Cont2,
-        Data_Venc = Data_Venc + Cont2,
+        Data_Venc = DATE_ADD(Data_Venc, INTERVAL Cont2 DAY),
         Val_Pgto = Val_Par,
         Data_Pgto = Data_Venc
       WHERE Linha = Cont;
@@ -216,9 +216,14 @@ BEGIN
 
   END WHILE;
 
+  -- SELECT *
+  -- FROM Tabela
+  -- WHERE Num_Par IS NULL;
+
   INSERT INTO Parcela (Num_Par, Num_Ped, Data_Venc, Val_Pgto, Data_Pgto)
     SELECT Num_Par, Num_Ped, Data_Venc, Val_Par, Data_Pgto
-    FROM Tabela;
+    FROM Tabela
+    /* WHERE Num_Par IS NOT NULL */;
 
   -- ALTER TABLE PARCELA
   -- CHECK CONSTRAINT CH_Parcela1;
@@ -331,56 +336,56 @@ VALUES
   (3, 'Helder Leão', '1999-10-10', 2000, 'M'),
   (2, 'Olga Cristina Bonfiglioli', '1999-11-11', 8000, 'F'),
   (1, 'Maria Cristina Bonfiglioli Martins de Souza Santos', '1999-12-12', 5000, 'F'),
-  (1, 'Salvador Eneas Feredico', '1999-13-01', 9000, 'M'),
-  (1, 'Dolores Gerreiro Martins', '2000-14-02', 8000, 'F'),
-  (1, 'Fabiana Bataglin', '2000-15-03', 5000, 'F'),
-  (2, 'Aparecida Ribeiro', '2000-16-04', 3000, 'F'),
-  (3, 'Reginaldo Ribeiro', '2000-17-05', 4000, 'M'),
-  (4, 'Suellen M Nunes', '2000-18-06', 3000, 'F'),
-  (1, 'Carlos Alberto', '2000-19-07', 2000, 'M'),
-  (2, 'Roberto Arruda', '2000-20-08', 1000, 'M'),
-  (3, 'Sandra Medeiros', '2000-21-09', 1500, 'F'),
-  (4, 'Alice Santos', '2001-22-10', 2500, 'F'),
-  (5, 'Valter Sanches', '2001-23-11', 3500, 'M'),
-  (6, 'Pascoal Babiera', '2001-24-12', 1525, 'M'),
-  (1, 'Lucia Bacalla', '2001-25-01', 6321, 'F'),
-  (3, 'Maria Belido', '2001-26-02', 5412, 'F'),
-  (4, 'Hamilton Belico', '2001-26-03', 2563, 'M'),
-  (5, 'Alberto Belli', '2001-27-04', 2412, 'M'),
-  (6, 'Marcia Bueno', '2001-28-05', 1235, 'F'),
-  (1, 'Maria Catta', '2001-29-06', 1236, 'F'),
-  (2, 'Carlos Cattaneo', '2001-30-07', 1253, 'M'),
-  (3, 'Andre Caula', '2001-31-08', 1524, 'M'),
-  (4, 'Fabia Dávello', '2001-01-09', 1236, 'F'),
-  (5, 'Afonso Ferraro', '2001-02-10', 1256, 'M'),
-  (6, 'Akemi Fukamizu', '2001-03-11', 1452, 'F'),
-  (1, 'Bernadino Gomes', '2001-04-12', 11785, 'M'),
-  (2, 'Regiani Hoki', '2001-05-01', 1524, 'F'),
-  (3, 'Valter Koszura', '2001-06-02', 1256, 'M'),
-  (4, 'Alexandre Kozeki', '2001-07-03', 1225, 'M'),
-  (5, 'Vittorio Lannocca', '2001-08-04', 1253, 'M'),
-  (6, 'Domingos Lanini', '2002-09-05', 1253, 'M'),
-  (1, 'Paulo Mello', '2001-10-06', 10000, 'M'),
-  (2, 'Zilda Mellone', '2001-11-07', 8000, 'F'),
-  (3, 'Marlene Moura', '2001-12-08', 3000, 'F'),
-  (4, 'Francisca Oliveira', '2001-13-09', 2300, 'F'),
-  (5, 'Marlene Pereira', '2001-14-10', 2562, 'F'),
-  (6, 'Milton Pereira', '2001-15-11', 2563, 'M'),
-  (1, 'Ligia Ramos', '2001-16-12', 9200, 'F'),
-  (2, 'Mariangela Ramos', '2001-17-01', 7000, 'F'),
-  (3, 'Dora Romariz', '2001-18-02', 5263, 'F'),
-  (4, 'Paulino Romelli', '2001-19-03', 5428, 'M'),
-  (5, 'Fernando Sampaio', '2001-20-04', 2023, 'M'),
-  (6, 'José Sampaio', '2001-21-05', 2235, 'M'),
-  (1, 'Vicenzo Senatori', '2001-22-06', 7000, 'M'),
-  (2, 'Geraldo Senedeze', '2001-23-07', 2531, 'M'),
-  (3, 'Mauro Soares', '2001-24-08', 2532, 'M'),
-  (4, 'Paulo Souza', '2001-25-09', 2542, 'M'),
-  (5, 'Emidio Trifoni', '2001-26-10', 2563, 'M'),
-  (6, 'Heitor Vernile', '2001-27-11', 2542, 'M'),
-  (1, 'Carlos Saura', '2001-28-12', 6000, 'M'),
-  (2, 'Angelino Saullo', '2001-29-01', 5000, 'M'),
-  (3, 'Aldo Savazzoni', '2001-28-02', 4000, 'M')
+  (1, 'Salvador Eneas Feredico', '1999-01-13', 9000, 'M'),
+  (1, 'Dolores Gerreiro Martins', '2000-02-14', 8000, 'F'),
+  (1, 'Fabiana Bataglin', '2000-03-15', 5000, 'F'),
+  (2, 'Aparecida Ribeiro', '2000-04-16', 3000, 'F'),
+  (3, 'Reginaldo Ribeiro', '2000-05-17', 4000, 'M'),
+  (4, 'Suellen M Nunes', '2000-06-18', 3000, 'F'),
+  (1, 'Carlos Alberto', '2000-07-19', 2000, 'M'),
+  (2, 'Roberto Arruda', '2000-08-20', 1000, 'M'),
+  (3, 'Sandra Medeiros', '2000-09-21', 1500, 'F'),
+  (4, 'Alice Santos', '2001-10-22', 2500, 'F'),
+  (5, 'Valter Sanches', '2001-11-23', 3500, 'M'),
+  (6, 'Pascoal Babiera', '2001-12-24', 1525, 'M'),
+  (1, 'Lucia Bacalla', '2001-01-25', 6321, 'F'),
+  (3, 'Maria Belido', '2001-02-26', 5412, 'F'),
+  (4, 'Hamilton Belico', '2001-03-26', 2563, 'M'),
+  (5, 'Alberto Belli', '2001-04-27', 2412, 'M'),
+  (6, 'Marcia Bueno', '2001-05-28', 1235, 'F'),
+  (1, 'Maria Catta', '2001-06-29', 1236, 'F'),
+  (2, 'Carlos Cattaneo', '2001-07-30', 1253, 'M'),
+  (3, 'Andre Caula', '2001-08-31', 1524, 'M'),
+  (4, 'Fabia Dávello', '2001-09-01', 1236, 'F'),
+  (5, 'Afonso Ferraro', '2001-10-02', 1256, 'M'),
+  (6, 'Akemi Fukamizu', '2001-11-03', 1452, 'F'),
+  (1, 'Bernadino Gomes', '2001-12-04', 11785, 'M'),
+  (2, 'Regiani Hoki', '2001-01-05', 1524, 'F'),
+  (3, 'Valter Koszura', '2001-02-06', 1256, 'M'),
+  (4, 'Alexandre Kozeki', '2001-03-07', 1225, 'M'),
+  (5, 'Vittorio Lannocca', '2001-04-08', 1253, 'M'),
+  (6, 'Domingos Lanini', '2002-05-09', 1253, 'M'),
+  (1, 'Paulo Mello', '2001-06-10', 10000, 'M'),
+  (2, 'Zilda Mellone', '2001-07-11', 8000, 'F'),
+  (3, 'Marlene Moura', '2001-08-12', 3000, 'F'),
+  (4, 'Francisca Oliveira', '2001-09-13', 2300, 'F'),
+  (5, 'Marlene Pereira', '2001-10-14', 2562, 'F'),
+  (6, 'Milton Pereira', '2001-11-15', 2563, 'M'),
+  (1, 'Ligia Ramos', '2001-12-16', 9200, 'F'),
+  (2, 'Mariangela Ramos', '2001-01-17', 7000, 'F'),
+  (3, 'Dora Romariz', '2001-02-18', 5263, 'F'),
+  (4, 'Paulino Romelli', '2001-03-19', 5428, 'M'),
+  (5, 'Fernando Sampaio', '2001-04-20', 2023, 'M'),
+  (6, 'José Sampaio', '2001-05-21', 2235, 'M'),
+  (1, 'Vicenzo Senatori', '2001-06-22', 7000, 'M'),
+  (2, 'Geraldo Senedeze', '2001-07-23', 2531, 'M'),
+  (3, 'Mauro Soares', '2001-08-24', 2532, 'M'),
+  (4, 'Paulo Souza', '2001-09-25', 2542, 'M'),
+  (5, 'Emidio Trifoni', '2001-10-26', 2563, 'M'),
+  (6, 'Heitor Vernile', '2001-11-27', 2542, 'M'),
+  (1, 'Carlos Saura', '2001-12-28', 6000, 'M'),
+  (2, 'Angelino Saullo', '2001-01-29', 5000, 'M'),
+  (3, 'Aldo Savazzoni', '2001-02-28', 4000, 'M')
 
 ;
 

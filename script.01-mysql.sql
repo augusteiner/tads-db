@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS exemplo.Cidade (
 
   CONSTRAINT PK_Cid PRIMARY KEY (Cod_Cid),
 
-  CONSTRAINT FK_Cid FOREIGN KEY (Sigla_Est) REFERENCES Estado (Sigla_Est),
+  CONSTRAINT FK_Cid FOREIGN KEY (Sigla_Est) REFERENCES exemplo.Estado (Sigla_Est),
 
   CONSTRAINT UQ_Cid UNIQUE KEY (Sigla_Est, Nome_Cid)
 
@@ -105,12 +105,12 @@ CREATE TABLE IF NOT EXISTS exemplo.Cliente (
   Cod_TipoCli BIGINT UNSIGNED NOT NULL,
   Nome_Cli VARCHAR(100) NOT NULL,
   Data_CadCli TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  Renda_Cli DECIMAL(10,2) NOT NULL DEFAULT 0,
+  Renda_Cli DECIMAL(14,4) NOT NULL DEFAULT 0,
   Sexo_Cli CHAR(01) NOT NULL DEFAULT 'F',
 
   CONSTRAINT PK_Cli PRIMARY KEY (Cod_Cli),
 
-  CONSTRAINT FK_Cli FOREIGN KEY (Cod_TipoCli) REFERENCES TipoCli (Cod_TipoCli),
+  CONSTRAINT FK_Cli FOREIGN KEY (Cod_TipoCli) REFERENCES exemplo.TipoCli (Cod_TipoCli),
 
   CONSTRAINT CH_Cli1 CHECK (Renda_Cli >= 0),
   CONSTRAINT CH_Cli2 CHECK (Sexo_Cli IN ('F', 'M'))
@@ -122,12 +122,12 @@ CREATE TABLE IF NOT EXISTS exemplo.Conjuge (
 
   Cod_Cli BIGINT UNSIGNED NOT NULL,
   Nome_Conj CHAR(30) NOT NULL,
-  Renda_Conj DECIMAL(10,2) NOT NULL DEFAULT 0,
+  Renda_Conj DECIMAL(14,4) NOT NULL DEFAULT 0,
   Sexo_Conj CHAR(01) NOT NULL DEFAULT 'M',
 
   CONSTRAINT PK_Conj PRIMARY KEY (Cod_Cli),
 
-  CONSTRAINT FK_Conj FOREIGN KEY (Cod_Cli) REFERENCES Cliente (Cod_Cli),
+  CONSTRAINT FK_Conj FOREIGN KEY (Cod_Cli) REFERENCES exemplo.Cliente (Cod_Cli),
 
   CONSTRAINT CH_Conj1 CHECK (Renda_Conj >= 0),
   CONSTRAINT CH_Conj2 CHECK (Sexo_Conj IN ('F', 'M'))
@@ -147,9 +147,9 @@ CREATE TABLE IF NOT EXISTS exemplo.Endereco (
 
   CONSTRAINT PK_End PRIMARY KEY (Cod_End),
 
-  CONSTRAINT FK_End1 FOREIGN KEY (Cod_TipoEnd) REFERENCES TipoEnd (Cod_TipoEnd),
-  CONSTRAINT FK_End2 FOREIGN KEY (Cod_Cid) REFERENCES Cidade (Cod_Cid),
-  CONSTRAINT FK_End3 FOREIGN KEY (Cod_Cli) REFERENCES Cliente (Cod_Cli)
+  CONSTRAINT FK_End1 FOREIGN KEY (Cod_TipoEnd) REFERENCES exemplo.TipoEnd (Cod_TipoEnd),
+  CONSTRAINT FK_End2 FOREIGN KEY (Cod_Cid) REFERENCES exemplo.Cidade (Cod_Cid),
+  CONSTRAINT FK_End3 FOREIGN KEY (Cod_Cli) REFERENCES exemplo.Cliente (Cod_Cli)
 
 )
 ;
@@ -158,12 +158,12 @@ CREATE TABLE IF NOT EXISTS exemplo.Credito (
 
   Num_Lanc SERIAL,
   Cod_Cli BIGINT UNSIGNED NOT NULL,
-  Cred_Cli DECIMAL(10,2) NOT NULL,
+  Cred_Cli DECIMAL(14,4) NOT NULL,
   Data_CredCli DATETIME NOT NULL,
 
   CONSTRAINT PK_Cred PRIMARY KEY (Num_Lanc),
 
-  CONSTRAINT FK_Cred FOREIGN KEY (Cod_Cli) REFERENCES Cliente (Cod_Cli),
+  CONSTRAINT FK_Cred FOREIGN KEY (Cod_Cli) REFERENCES exemplo.Cliente (Cod_Cli),
 
   CONSTRAINT CH_Cred CHECK (Cred_Cli > 0)
 
@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS exemplo.Fone (
 
   CONSTRAINT PK_Fone PRIMARY KEY (Num_Lanc),
 
-  CONSTRAINT FK_Fone FOREIGN KEY (Cod_Cli) REFERENCES Cliente (Cod_Cli)
+  CONSTRAINT FK_Fone FOREIGN KEY (Cod_Cli) REFERENCES exemplo.Cliente (Cod_Cli)
 
 )
 ;
@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS exemplo.EMail (
 
   CONSTRAINT PK_Email PRIMARY KEY (Num_Lanc),
 
-  CONSTRAINT FK_Emails FOREIGN KEY (Cod_Cli) REFERENCES Cliente (Cod_Cli)
+  CONSTRAINT FK_Emails FOREIGN KEY (Cod_Cli) REFERENCES exemplo.Cliente (Cod_Cli)
 
 )
 ;
@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS exemplo.Funcionario (
   Nome_Func VARCHAR(100) NOT NULL,
   Data_CadFunc TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Sexo_Func CHAR(01) NOT NULL DEFAULT 'F',
-  Sal_Func DECIMAL(10,2) NOT NULL DEFAULT 200,
+  Sal_Func DECIMAL(14,4) NOT NULL DEFAULT 200,
   End_Func VARCHAR(100) NOT NULL,
 
   CONSTRAINT PK_Func PRIMARY KEY (Cod_Func),
@@ -232,11 +232,11 @@ CREATE TABLE IF NOT EXISTS exemplo.Bonus (
   Num_Lanc SERIAL,
   Cod_Func BIGINT UNSIGNED NOT NULL,
   Data_Bonus TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  Val_Bonus DECIMAL(10,2) NOT NULL,
+  Val_Bonus DECIMAL(14,4) NOT NULL,
 
   CONSTRAINT PK_Bonus PRIMARY KEY (Num_Lanc),
 
-  CONSTRAINT FK_Bonus FOREIGN KEY (Cod_Func) REFERENCES Funcionario (Cod_Func),
+  CONSTRAINT FK_Bonus FOREIGN KEY (Cod_Func) REFERENCES exemplo.Funcionario (Cod_Func),
 
   -- CONSTRAINT CH_Bonus1 CHECK (Data_Bonus >= CURDATE()),
   CONSTRAINT CH_Bonus2 CHECK (Val_Bonus > 0)
@@ -253,7 +253,7 @@ CREATE TABLE IF NOT EXISTS exemplo.Pontuacao (
 
   CONSTRAINT PK_Pto PRIMARY KEY (Num_Lanc),
 
-  CONSTRAINT FK_Pto FOREIGN KEY (Cod_Func) REFERENCES Funcionario (Cod_Func),
+  CONSTRAINT FK_Pto FOREIGN KEY (Cod_Func) REFERENCES exemplo.Funcionario (Cod_Func),
 
   -- CONSTRAINT CH_Pto1 CHECK (Data_Pto >= CURDATE()),
   CONSTRAINT CH_Pto2 CHECK (Pto_Func > 0)
@@ -266,12 +266,12 @@ CREATE TABLE IF NOT EXISTS exemplo.Historico (
   Num_Lanc SERIAL,
   Cod_Func BIGINT UNSIGNED NOT NULL,
   Data_Hist TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  Sal_Ant DECIMAL(10,2) NOT NULL,
-  Sal_Atual DECIMAL(10,2) NOT NULL,
+  Sal_Ant DECIMAL(14,4) NOT NULL,
+  Sal_Atual DECIMAL(14,4) NOT NULL,
 
   CONSTRAINT PK_Hist PRIMARY KEY (Num_Lanc),
 
-  CONSTRAINT FK_Hist FOREIGN KEY (Cod_Func) REFERENCES Funcionario (Cod_Func),
+  CONSTRAINT FK_Hist FOREIGN KEY (Cod_Func) REFERENCES exemplo.Funcionario (Cod_Func),
 
   -- CONSTRAINT CH_Hist1 CHECK (Data_Hist >= CURDATE()),
   CONSTRAINT CH_Hist2 CHECK (Sal_Ant >= 0),
@@ -290,7 +290,7 @@ CREATE TABLE IF NOT EXISTS exemplo.Dependente (
 
   CONSTRAINT PK_Dep PRIMARY KEY (Cod_Dep),
 
-  CONSTRAINT FK_Dep FOREIGN KEY (Cod_Func) REFERENCES Funcionario (Cod_Func),
+  CONSTRAINT FK_Dep FOREIGN KEY (Cod_Func) REFERENCES exemplo.Funcionario (Cod_Func),
 
   CONSTRAINT CH_Dep CHECK (Sexo_Dep IN ('F', 'M'))
 
@@ -304,12 +304,12 @@ CREATE TABLE IF NOT EXISTS exemplo.Pedido (
   Cod_Func BIGINT UNSIGNED NOT NULL,
   Cod_Sta BIGINT UNSIGNED NOT NULL,
   Data_Ped TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  Val_Ped DECIMAL(10,2) NOT NULL DEFAULT 0,
+  Val_Ped DECIMAL(14,4) NOT NULL DEFAULT 0,
 
   CONSTRAINT PK_Pedido PRIMARY KEY (Num_Ped),
 
-  CONSTRAINT FK_Pedido1 FOREIGN KEY (Cod_Cli) REFERENCES Cliente (Cod_Cli),
-  CONSTRAINT FK_Pedido2 FOREIGN KEY (Cod_Func) REFERENCES Funcionario (Cod_Func),
+  CONSTRAINT FK_Pedido1 FOREIGN KEY (Cod_Cli) REFERENCES exemplo.Cliente (Cod_Cli),
+  CONSTRAINT FK_Pedido2 FOREIGN KEY (Cod_Func) REFERENCES exemplo.Funcionario (Cod_Func),
 
   -- CONSTRAINT CH_Pedido1 CHECK (Data_Ped >= CURDATE()),
   CONSTRAINT CH_Pedido2 CHECK (Val_Ped >=0)
@@ -322,9 +322,9 @@ CREATE TABLE IF NOT EXISTS exemplo.Parcela (
   Num_Par BIGINT UNSIGNED NOT NULL,
   Num_Ped BIGINT UNSIGNED NOT NULL,
   Data_Venc TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  Val_Venc DECIMAL(10,2) NOT NULL,
+  Val_Venc DECIMAL(14,4) NOT NULL,
   Data_Pgto DATETIME NULL,
-  Val_Pgto DECIMAL(10,2) AS (
+  Val_Pgto DECIMAL(14,4) /*M!100200 AS (
     CASE Data_Pgto < Data_Venc WHEN TRUE THEN
         Val_Venc * 0.9
     ELSE
@@ -333,11 +333,11 @@ CREATE TABLE IF NOT EXISTS exemplo.Parcela (
       ELSE
         Val_Venc * 1.1
       END
-    END),
+    END) */,
 
   CONSTRAINT PK_Parcela PRIMARY KEY (Num_Par,Num_Ped),
 
-  CONSTRAINT FK_Parcela FOREIGN KEY (Num_Ped) REFERENCES Pedido (Num_Ped),
+  CONSTRAINT FK_Parcela FOREIGN KEY (Num_Ped) REFERENCES exemplo.Pedido (Num_Ped),
 
   -- CONSTRAINT CH_Parcela1 CHECK (Data_Venc >= CURDATE()),
   CONSTRAINT CH_Parcela2 CHECK (Val_Venc >= 0)
@@ -363,12 +363,12 @@ CREATE TABLE IF NOT EXISTS exemplo.Produto (
   Cod_TipoProd BIGINT UNSIGNED NOT NULL,
   Nome_Prod VARCHAR(100) NOT NULL,
   Qtd_EstqProd BIGINT UNSIGNED NOT NULL DEFAULT 0,
-  Val_UnitProd DECIMAL(10,2) NOT NULL Check (Val_UnitProd > 0),
-  Val_Total DECIMAL(10,2) AS (Qtd_EstqProd * Val_UnitProd),
+  Val_UnitProd DECIMAL(14,4) NOT NULL Check (Val_UnitProd > 0),
+  Val_Total DECIMAL(14,4) /*M!100200 AS (Qtd_EstqProd * Val_UnitProd) */,
 
   CONSTRAINT PK_Prod PRIMARY KEY (Cod_Prod),
 
-  CONSTRAINT FK_Prod FOREIGN KEY (Cod_TipoProd) REFERENCES TipoProd (Cod_TipoProd),
+  CONSTRAINT FK_Prod FOREIGN KEY (Cod_TipoProd) REFERENCES exemplo.TipoProd (Cod_TipoProd),
 
   CONSTRAINT UQ_Prod UNIQUE KEY (Nome_Prod),
 
@@ -383,12 +383,12 @@ CREATE TABLE IF NOT EXISTS exemplo.Itens (
   Num_Ped BIGINT UNSIGNED NOT NULL,
   Cod_Prod BIGINT UNSIGNED NOT NULL,
   Qtd_Vend BIGINT UNSIGNED NOT NULL,
-  Val_Vend DECIMAL(10,2) NOT NULL,
+  Val_Vend DECIMAL(14,4) NOT NULL,
 
   CONSTRAINT PK_Itens PRIMARY KEY (Num_Ped,Cod_Prod),
 
-  CONSTRAINT FK_Itens1 FOREIGN KEY (Num_Ped) REFERENCES Pedido (Num_Ped),
-  CONSTRAINT FK_Itens2 FOREIGN KEY (Cod_Prod) REFERENCES Produto (Cod_Prod),
+  CONSTRAINT FK_Itens1 FOREIGN KEY (Num_Ped) REFERENCES exemplo.Pedido (Num_Ped),
+  CONSTRAINT FK_Itens2 FOREIGN KEY (Cod_Prod) REFERENCES exemplo.Produto (Cod_Prod),
 
   CONSTRAINT CH_Itens1 CHECK (Qtd_Vend > 0),
   CONSTRAINT CH_Itens2 CHECK (Val_Vend > 0)
