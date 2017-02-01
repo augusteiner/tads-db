@@ -3,15 +3,15 @@
 /*  Script_01                                                               */
 /****************************************************************************/
 
-CREATE DATABASE Exemplo
-GO
+CREATE DATABASE Exemplo;
+-- GO
 
 /****************************************************************************/
 /* Estabelecendo uma Conexão com o Database Exemplo                         */
 /****************************************************************************/
 
-USE Exemplo
-GO
+USE Exemplo;
+-- GO
 
 /****************************************************************************/
 /* Criando as tabelas do database SYSAMPLES                                 */
@@ -24,8 +24,8 @@ CREATE TABLE TipoEnd (
   Constraint PK_TipoEnd Primary Key(Cod_TipoEnd),
 
   Constraint UQ_TipoEnd Unique(Nome_TipoEnd)
-)
-GO
+);
+-- GO
 
 CREATE TABLE Estado (
   Sigla_Est char(02) not null,
@@ -34,8 +34,8 @@ CREATE TABLE Estado (
   Constraint PK_Est Primary Key(Sigla_Est),
 
   Constraint UQ_Est Unique(Nome_Est)
-)
-GO
+);
+-- GO
 
 CREATE TABLE Cidade (
   Cod_Cid int Identity Not Null,
@@ -47,8 +47,8 @@ CREATE TABLE Cidade (
   Constraint FK_Cid Foreign Key(Sigla_Est) References Estado(Sigla_Est),
 
   Constraint UQ_Cid Unique(Sigla_Est,Nome_Cid)
-)
-GO
+);
+-- GO
 
 CREATE TABLE TipoCli (
   Cod_TipoCli int identity not null,
@@ -57,8 +57,8 @@ CREATE TABLE TipoCli (
   Constraint PK_TipoCli Primary key(Cod_TipoCli),
 
   Constraint UQ_TipoCli Unique(Nome_TipoCli)
-)
-GO
+);
+-- GO
 
 CREATE TABLE Cliente (
   Cod_Cli int Identity not null,
@@ -74,8 +74,8 @@ CREATE TABLE Cliente (
 
   Constraint CH_Cli1 Check(Renda_Cli >=0),
   Constraint CH_Cli2 Check(Sexo_Cli IN('F','M'))
-)
-GO
+);
+-- GO
 
 CREATE TABLE Conjuge (
   Cod_Cli int not null,
@@ -89,8 +89,8 @@ CREATE TABLE Conjuge (
 
   Constraint CH_Conj1 Check(Renda_Conj >=0),
   Constraint CH_Conj2 Check(Sexo_Conj IN ('F','M'))
-)
-GO
+);
+-- GO
 
 CREATE TABLE Endereco (
   Cod_End int identity not null,
@@ -106,8 +106,8 @@ CREATE TABLE Endereco (
   Constraint FK_End1 Foreign Key(Cod_TipoEnd) References TipoEnd(Cod_TipoEnd),
   Constraint FK_End2 Foreign Key(Cod_Cid) References Cidade(Cod_Cid),
   Constraint FK_End3 Foreign Key(Cod_Cli) References Cliente(Cod_Cli)
-)
-GO
+);
+-- GO
 
 CREATE TABLE Credito (
   Num_Lanc int identity not null,
@@ -120,8 +120,8 @@ CREATE TABLE Credito (
   Constraint FK_Cred Foreign Key(Cod_Cli) References Cliente(Cod_Cli),
 
   Constraint CH_Cred Check(Cred_Cli > 0)
-)
-GO
+);
+-- GO
 
 CREATE TABLE Fone (
   Num_Lanc int identity not null,
@@ -132,8 +132,8 @@ CREATE TABLE Fone (
   Constraint PK_Fone Primary Key(Num_Lanc),
 
   Constraint FK_Fone Foreign Key(Cod_Cli) References Cliente(Cod_Cli)
-)
-GO
+);
+-- GO
 
 CREATE TABLE EMail (
   Num_Lanc int identity not null,
@@ -143,8 +143,8 @@ CREATE TABLE EMail (
   Constraint PK_Email Primary Key(Num_Lanc),
 
   Constraint FK_Emails Foreign Key(Cod_Cli) References Cliente(Cod_Cli)
-)
-GO
+);
+-- GO
 
 CREATE TABLE StatusPedido (
   Cod_Sta smallint identity not null,
@@ -153,8 +153,8 @@ CREATE TABLE StatusPedido (
   Constraint PK_StatusPed Primary Key(Cod_Sta),
 
   Constraint UQ_StatusPed Unique(Sta_Ped)
-)
-GO
+);
+-- GO
 
 CREATE TABLE Funcionario (
   Cod_Func int Identity not null,
@@ -169,8 +169,8 @@ CREATE TABLE Funcionario (
   Constraint CH_Func1 Check(Data_CadFunc >=Getdate()),
   Constraint CH_Func2 Check(Sexo_Func IN ('F','M')),
   Constraint CH_Func3 Check(Sal_Func >=0)
-)
-GO
+);
+-- GO
 
 CREATE TABLE Bonus (
   Num_Lanc int identity not null,
@@ -184,8 +184,8 @@ CREATE TABLE Bonus (
 
   Constraint CH_Bonus1 Check(Data_Bonus >= Getdate()),
   Constraint CH_Bonus2 Check(Val_Bonus > 0)
-)
-GO
+);
+-- GO
 
 CREATE TABLE Pontuacao (
   Num_Lanc int identity not null,
@@ -199,8 +199,8 @@ CREATE TABLE Pontuacao (
 
   Constraint CH_Pto1 Check(Data_Pto >= Getdate()),
   Constraint CH_Pto2 Check(Pto_Func > 0)
-)
-GO
+);
+-- GO
 
 CREATE TABLE Historico (
   Num_Lanc int identity not null,
@@ -216,8 +216,8 @@ CREATE TABLE Historico (
   Constraint CH_Hist1 Check(Data_Hist >= Getdate()),
   Constraint CH_Hist2 Check(Sal_Ant >= 0),
   Constraint CH_Hist3 Check(Sal_Ant > 0)
-)
-GO
+);
+-- GO
 
 CREATE TABLE Dependente (
   Cod_Dep int identity not null,
@@ -231,8 +231,8 @@ CREATE TABLE Dependente (
   Constraint FK_Dep Foreign Key(Cod_Func) References Funcionario(Cod_Func),
 
   Constraint CH_Dep Check(Sexo_Dep IN ('F','M'))
-)
-GO
+);
+-- GO
 
 CREATE TABLE Pedido (
   Num_Ped int identity not null,
@@ -249,8 +249,8 @@ CREATE TABLE Pedido (
 
   Constraint CH_Pedido1 Check(Data_Ped >=getdate()),
   Constraint CH_Pedido2 Check(Val_Ped >=0)
-)
-GO
+);
+-- GO
 
 CREATE TABLE Parcela (
   Num_Par smallint not null,
@@ -270,8 +270,8 @@ CREATE TABLE Parcela (
 
   Constraint CH_Parcela1 Check(Data_Venc >= getdate()),
   Constraint CH_Parcela2 Check(Val_Venc >= 0),
-)
-GO
+);
+-- GO
 
 CREATE TABLE TipoProd (
   Cod_TipoProd int identity not null,
@@ -280,8 +280,8 @@ CREATE TABLE TipoProd (
   Constraint PK_TipoProd Primary Key(Cod_TipoProd),
 
   Constraint UQ_TipoProd Unique(Nome_TipoProd)
-)
-GO
+);
+-- GO
 
 CREATE TABLE Produto (
   Cod_Prod int identity not null,
@@ -299,8 +299,8 @@ CREATE TABLE Produto (
 
   Constraint CH_Prod1 Check(Qtd_EstqProd >= 0),
   Constraint CH_Prod2 Check(Val_UnitProd > 0)
-)
-GO
+);
+-- GO
 
 CREATE TABLE Itens (
   Num_Ped int not null,
@@ -315,15 +315,15 @@ CREATE TABLE Itens (
 
   Constraint CH_Itens1 Check(Qtd_Vend > 0),
   Constraint CH_Itens2 Check(Val_Vend > 0)
-)
-GO
+);
+-- GO
 
 /****************************************************************************/
 /* Verificando a Criação da Tabelas do Database SYSAMPLES                   */
 /****************************************************************************/
 
-SELECT *
-FROM Information_Schema.Tables
-WHERE Table_Type = 'Base Table'
+-- SELECT *
+-- FROM Information_Schema.Tables
+-- WHERE Table_Type = 'Base Table';
 
 /****************************************************************************/

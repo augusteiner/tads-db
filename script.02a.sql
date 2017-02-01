@@ -5,8 +5,8 @@
 /****************************************************************************/
 
 USE Exemplo
-
-GO
+;
+-- GO
 
 /****************************************************************************/
 /* Criando as Procedures que geram dados para as Tabelas                    */
@@ -42,8 +42,8 @@ AS
 
   ALTER TABLE Funcionario
   CHECK CONSTRAINT CH_Func1
-
-GO
+;
+-- GO
 
 /****************************************************************************/
 /****************************************************************************/
@@ -76,8 +76,8 @@ AS
 
   ALTER TABLE Bonus
   NOCHECK CONSTRAINT CH_Bonus1
-
-GO
+;
+-- GO
 
 /****************************************************************************/
 /****************************************************************************/
@@ -115,8 +115,8 @@ AS
 
   ALTER TABLE Pontuacao
   NOCHECK CONSTRAINT CH_Pto1
-
-GO
+;
+-- GO
 
 /****************************************************************************/
 /****************************************************************************/
@@ -133,13 +133,13 @@ AS
 
   ALTER TABLE Historico
   CHECK CONSTRAINT CH_Hist1
-
-GO
+;
+-- GO
 
 /****************************************************************************/
 /****************************************************************************/
-
-GO
+;
+-- GO
 
 CREATE PROCEDURE P_GeraDadosPedido
 AS
@@ -200,8 +200,8 @@ AS
 
   ALTER TABLE Pedido
   NOCHECK CONSTRAINT CH_Pedido1, FK_Pedido1, FK_Pedido2
-
-GO
+;
+-- GO
 
 /****************************************************************************/
 /****************************************************************************/
@@ -267,8 +267,8 @@ AS
 
   ALTER TABLE PARCELA
   CHECK CONSTRAINT CH_Parcela1
-
-GO
+;
+-- GO
 
 /****************************************************************************/
 /****************************************************************************/
@@ -284,8 +284,8 @@ AS
     FROM Pedido
     CROSS JOIN Produto
     WHERE Pedido.Num_Ped BETWEEN @Cod1 AND @Cod2
-
-GO
+;
+-- GO
 
 /****************************************************************************/
 /* Inserindo dados diretamente nas tabelas e com a execução das procedures  */
@@ -298,8 +298,8 @@ INSERT TipoEnd VALUES('Correspondência')
 INSERT TipoEnd VALUES('Cobrança')
 INSERT TipoEnd VALUES('Residential')
 INSERT TipoEnd VALUES('Comercial')
-
-GO
+;
+-- GO
 
 INSERT Estado VALUES('AC','Acre')
 INSERT Estado VALUES('AL','Alagoas')
@@ -327,8 +327,8 @@ INSERT Estado VALUES('SC','Santa Catarina')
 INSERT Estado VALUES('SE','Sergipe')
 INSERT Estado VALUES('SP','São Paulo')
 INSERT Estado VALUES('TO','Tocantins')
-
-GO
+;
+-- GO
 
 INSERT Cidade VALUES('SP','Araraquara')
 INSERT Cidade VALUES('SP','Americana')
@@ -337,8 +337,8 @@ INSERT Cidade VALUES('SP','Fernandópolis')
 INSERT Cidade VALUES('SP','Jundiaí')
 INSERT Cidade VALUES('SP','Sorocaba')
 INSERT Cidade VALUES('SP','São José do Rio Preto')
-
-GO
+;
+-- GO
 
 INSERT TipoCli VALUES('Diamante')
 INSERT TipoCli VALUES('Ouro')
@@ -346,8 +346,8 @@ INSERT TipoCli VALUES('Prata')
 INSERT TipoCli VALUES('Bronze')
 INSERT TipoCli VALUES('Cobre')
 INSERT TipoCli VALUES('Zinco')
-
-GO
+;
+-- GO
 
 INSERT Cliente VALUES(1,'João Carlos','01/01/1999',10000,'M')
 INSERT Cliente VALUES(1,'Daniel Souza','02/02/1999',10000,'M')
@@ -411,8 +411,8 @@ INSERT Cliente VALUES(6,'Heitor Vernile','11/27/2001',2542,'M')
 INSERT Cliente VALUES(1,'Carlos Saura','12/28/2001',6000,'M')
 INSERT Cliente VALUES(2,'Angelino Saullo','01/29/2001',5000,'M')
 INSERT Cliente VALUES(3,'Aldo Savazzoni','02/28/2001',4000,'M')
-
-GO
+;
+-- GO
 
 INSERT Conjuge VALUES(1,'Renata',3000.00,'F')
 INSERT Conjuge VALUES(2,'Helena',5000.00,'F')
@@ -421,8 +421,8 @@ INSERT Conjuge VALUES(4,'Tarcisio',1000.00,'M')
 INSERT Conjuge VALUES(5,'João Carlos',7000.00,'M')
 INSERT Conjuge VALUES(6,'Carla',9000.00,'M')
 INSERT Conjuge VALUES(7,'Ana Lucia',3000.00,'F')
-
-GO
+;
+-- GO
 
 INSERT Endereco VALUES(1,1,1,'Rua Soraia - 29','Vila Santana',null)
 INSERT Endereco VALUES(2,1,1,'Rua Macunaima - 192','Jd.Europa',null)
@@ -474,8 +474,8 @@ INSERT Endereco VALUES(1,2,41,'Rua Moura, 147','Vila Viela',null)
 INSERT Endereco VALUES(1,3,42,'Rua Aroeir, 954','Vila Amarela',null)
 INSERT Endereco VALUES(1,3,43,'Rua Pereira, 394','Vila Verde',null)
 INSERT Endereco VALUES(2,3,44,'Rua Galeão, 54','Vila Branca',null)
-
-GO
+;
+-- GO
 
 INSERT Credito VALUES(1,1000.00,Getdate()-30)
 INSERT Credito VALUES(1,2000.00,Getdate()-29)
@@ -540,8 +540,8 @@ INSERT Credito VALUES(58,1000.00,Getdate()-1)
 INSERT Credito VALUES(59,1000.00,Getdate()-1)
 INSERT Credito VALUES(60,1000.00,Getdate()-2)
 INSERT Credito VALUES(61,1000.00,Getdate()-3)
-
-GO
+;
+-- GO
 
 INSERT Fone VALUES(1,'434-2356','011')
 INSERT Fone VALUES(1,'256-4578','011')
@@ -621,8 +621,8 @@ INSERT Fone VALUES(57,'111-1818','011')
 INSERT Fone VALUES(58,'444-1919','011')
 INSERT Fone VALUES(59,'222-2020','011')
 INSERT Fone VALUES(62,'333-2121','011')
-
-GO
+;
+-- GO
 
 INSERT Email VALUES(1,'Joaobrasao@Hotmail.com')
 INSERT Email VALUES(1,'Joaobrasao@bbb.com.br')
@@ -654,33 +654,33 @@ INSERT Email VALUES(54,'VicenzoSenatori@uol.com.br')
 INSERT Email VALUES(55,'GeraldoSenedeze@uol.com.br')
 INSERT Email VALUES(61,'AngelinoSaullo@uol.com.br')
 INSERT Email VALUES(62,'AldoSavazzoni@uol.com.br')
-
-GO
+;
+-- GO
 
 INSERT StatusPedido VALUES('Aberto')
 INSERT StatusPedido VALUES('Pendente')
 INSERT StatusPedido VALUES('Fechado')
 INSERT StatusPedido VALUES('Cancelado')
+;
+-- GO
 
-GO
+Exec P_GeraDadosFuncionario;
+-- GO
 
-Exec P_GeraDadosFuncionario
-GO
+Exec P_GeraDadosBonus 100.00;
+-- GO
 
-Exec P_GeraDadosBonus 100.00
-GO
+Exec P_GeraDadosBonus 300.00;
+-- GO
 
-Exec P_GeraDadosBonus 300.00
-GO
+Exec P_GeraDadosPontuacao 10,1,10;
+-- GO
 
-Exec P_GeraDadosPontuacao 10,1,10
-GO
+Exec P_GeraDadosPontuacao 70,11,22;
+-- GO
 
-Exec P_GeraDadosPontuacao 70,11,22
-GO
-
-Exec P_GeraDadosHistorico
-GO
+Exec P_GeraDadosHistorico;
+-- GO
 
 INSERT Dependente VALUES(3,'Sebastiana Maria','01/02/64','F')
 INSERT Dependente VALUES(3,'Sebastião Mario','01/02/64','M')
@@ -689,43 +689,43 @@ INSERT Dependente VALUES(4,'Aureo Visture','01/02/64','M')
 INSERT Dependente VALUES(7,'Pedro da Silva','01/02/64','F')
 INSERT Dependente VALUES(7,'Alvares da Silva','01/02/64','M')
 INSERT Dependente VALUES(7,'Cabral da Silva','01/02/64','M')
+;
+-- GO
 
-GO
+Exec P_GeraDadosPedido;
+-- GO
 
-Exec P_GeraDadosPedido
-GO
+Exec P_Parcelas 0,300,3;
+-- GO
 
-Exec P_Parcelas 0,300,3
-GO
+Exec P_Parcelas 301,400,4;
+-- GO
 
-Exec P_Parcelas 301,400,4
-GO
+Exec P_Parcelas 401,500,5;
+-- GO
 
-Exec P_Parcelas 401,500,5
-GO
+Exec P_Parcelas 501,600,6;
+-- GO
 
-Exec P_Parcelas 501,600,6
-GO
+Exec P_Parcelas 601,700,7;
+-- GO
 
-Exec P_Parcelas 601,700,7
-GO
+Exec P_Parcelas 701,800,8;
+-- GO
 
-Exec P_Parcelas 701,800,8
-GO
+Exec P_Parcelas 801,900,9;
+-- GO
 
-Exec P_Parcelas 801,900,9
-GO
-
-Exec P_Parcelas 901,10000,10
-GO
+Exec P_Parcelas 901,10000,10;
+-- GO
 
 INSERT TipoProd VALUES('Primeira Linha')
 INSERT TipoProd VALUES('Segunda Linha')
 INSERT TipoProd VALUES('Terceira Linha')
 INSERT TipoProd VALUES('Quarta Linha')
 INSERT TipoProd VALUES('Quinta Linha')
-
-GO
+;
+-- GO
 
 INSERT Produto VALUES(1,'Armário Inox',1000,1200)
 INSERT Produto VALUES(1,'Armário Madeira',1000,2200)
@@ -739,26 +739,26 @@ INSERT Produto VALUES(1,'Estante Madeira',500,12200)
 INSERT Produto VALUES(1,'Cama',500,1200)
 INSERT Produto VALUES(1,'Geladeira',500,3200)
 INSERT Produto VALUES(1,'Fogão',500,700)
+;
+-- GO
 
-GO
+Exec P_GeraDadosItens 1,100,1;
+-- GO
 
-Exec P_GeraDadosItens 1,100,1
-GO
+Exec P_GeraDadosItens 101,200,2;
+-- GO
 
-Exec P_GeraDadosItens 101,200,2
-GO
+Exec P_GeraDadosItens 201,300,2;
+-- GO
 
-Exec P_GeraDadosItens 201,300,2
-GO
+Exec P_GeraDadosItens 301,400,2;
+-- GO
 
-Exec P_GeraDadosItens 301,400,2
-GO
+Exec P_GeraDadosItens 401,10000,3;
+-- GO
 
-Exec P_GeraDadosItens 401,10000,3
-GO
-
-Exec P_GeraDadosItens 10001,10000,4
-GO
+Exec P_GeraDadosItens 10001,10000,4;
+-- GO
 
 /****************************************************************************/
 /* Verificando a Criação da Tabelas do Database SYSAMPLES                   */
