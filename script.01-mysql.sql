@@ -400,10 +400,11 @@ CREATE TABLE IF NOT EXISTS exemplo.Itens (
 /* Verificando a Criação da Tabelas do Database SYSAMPLES                   */
 /****************************************************************************/
 
+/*
 SELECT *
 FROM Information_Schema.Tables
 WHERE Table_Type = 'Base Table'
-
+*/
 ;
 
 /****************************************************************************/
