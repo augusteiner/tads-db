@@ -13,7 +13,7 @@ ON c.Cod_Cli = p.Cod_Cli
 INNER JOIN Funcionario AS f
 ON f.Cod_Func = p.Cod_Func;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT p.Num_Ped, p.Data_Ped, p.Val_Ped,
        ( SELECT Nome_Cli FROM Cliente WHERE Cod_Cli = p.Cod_Cli ) AS Nome_Cli,
@@ -32,7 +32,7 @@ FROM Cliente AS ci
 LEFT JOIN Conjuge AS co
 ON ci.Cod_Cli = co.Cod_Cli;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT Nome_Cli, ( SELECT Nome_Conj FROM Conjuge WHERE Conjuge.Cod_Cli = c.Cod_Cli ) Nome_Conj
 
@@ -48,7 +48,7 @@ FROM Cliente
 LEFT JOIN Conjuge
 ON Conjuge.Cod_Cli = Cliente.Cod_Cli;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT c.Nome_Cli,
        c.Renda_Cli + COALESCE(( SELECT Renda_Conj FROM Conjuge WHERE Conjuge.Cod_Cli = c.Cod_Cli ), 0) Renda_Somada
@@ -75,7 +75,7 @@ FROM Cliente AS c
 INNER JOIN EMail e
 ON e.Cod_Cli = c.Cod_Cli;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT c.*, f.Num_Fone Contato, 'FONE' AS Contato_Tipo
 
@@ -91,7 +91,7 @@ FROM Cliente AS c, EMail e
 
 WHERE c.Cod_Cli IN (e.Cod_Cli);
 
--- OU (Spartan Mode) :: Somente subqueries
+-- XXX usando sub-consulta (Spartan Mode) :: Somente subqueries
 
 SELECT
   ( SELECT Cod_Cli FROM Cliente WHERE Cod_Cli = f.Cod_Cli) Cod_Cli,
@@ -135,7 +135,7 @@ ON ci.Cod_Cid = e.Cod_Cid
 LEFT JOIN Estado AS es
 ON es.Sigla_Est = ci.Sigla_Est;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT
   ( SELECT Nome_Cli FROM Cliente WHERE Cod_Cli = e.Cod_Cli ) AS Nome_Cli,
@@ -155,7 +155,7 @@ FROM Funcionario AS f
 INNER JOIN Dependente AS d
 ON f.Cod_Func = d.Cod_Func;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT
   ( SELECT Cod_Func FROM Funcionario WHERE Cod_Func = d.Cod_Func ) Cod_Func,
@@ -174,7 +174,7 @@ FROM Funcionario as f
 LEFT JOIN Historico as h
 ON f.Cod_Func = h.Cod_Func;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT
   h.Cod_Func,
@@ -196,7 +196,7 @@ ON c.Cod_Cli = p.Cod_Cli
 INNER JOIN Parcela AS pa
 ON p.Num_Ped = pa.Num_Ped;
 
--- OU
+-- FIXME usando sub-consulta
 
 SELECT
   ( SELECT Nome_Cli FROM Cliente WHERE Cod_Cli IN ( SELECT Cod_Cli FROM Pedido WHERE Num_Ped = p.Num_Ped ) ) Nome_Cli,
@@ -232,7 +232,7 @@ ON Cliente.Cod_Cli = Conjuge.Cod_Cli
 
 WHERE Conjuge.Cod_Cli IS NULL;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT Cliente.*
 
@@ -240,7 +240,7 @@ FROM Cliente
 
 WHERE NOT EXISTS ( SELECT Cod_Cli FROM Conjuge WHERE Conjuge.Cod_Cli = Cliente.Cod_Cli );
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT Cliente.*
 
@@ -267,7 +267,7 @@ ON f.Cod_Cli = c.Cod_Cli
 
 WHERE f.Cod_Cli IS NULL;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT c.*
 
@@ -275,7 +275,7 @@ FROM Cliente AS c
 
 WHERE c.Cod_Cli NOT IN ( SELECT Cod_Cli FROM Fone );
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT c.*
 
@@ -299,7 +299,7 @@ WHERE
   f.Cod_Cli IS NULL
   AND e.Cod_Cli IS NULL;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT c.*
 
@@ -320,7 +320,7 @@ ON p.Cod_Cli = c.Cod_Cli
 
 WHERE p.Cod_Cli IS NULL;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT c.Cod_Cli, c.Cod_TipoCli, c.Nome_Cli, c.Data_CadCli, c.Renda_Cli, c.Sexo_Cli
 
@@ -337,7 +337,7 @@ FROM Cliente AS c
 INNER JOIN Pedido AS p
 ON p.Cod_Cli = c.Cod_Cli;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT c.*
 
@@ -357,7 +357,7 @@ ON p.Cod_Cli = c.Cod_Cli
 
 WHERE p.Cod_Func = 1;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT c.*
 
@@ -378,7 +378,7 @@ WHERE
   -- XXX Pedidos não parcelados
   pa.Num_Ped IS NULL;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT p.*
 
@@ -402,7 +402,7 @@ ON d.Cod_Func = p.Cod_Func
 
 WHERE d.Cod_Func IS NULL;
 
--- OU
+-- XXX usando sub-consulta
 
 SELECT c.*
 
@@ -412,7 +412,10 @@ WHERE c.Cod_Cli IN (
 
   -- XXX Funcionários SEM dependentes (NOT IN)
   SELECT p.Cod_Cli FROM Pedido p WHERE p.Cod_Func NOT IN (
+
     -- XXX Códigos de funcionários COM dependentes
-    SELECT Cod_Func FROM Dependente)
+    SELECT Cod_Func FROM Dependente
+
+  )
 
 );
